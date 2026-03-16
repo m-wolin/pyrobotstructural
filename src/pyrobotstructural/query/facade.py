@@ -5,6 +5,7 @@ from .bars import BarsQuery
 from .loadcases import CasesQuery
 from .combinations import CombinationsQuery
 from .model import ModelQuery
+from .results import BarResultsQuery, ShellResultsQuery
 
 
 class QueryFacade:
@@ -15,3 +16,5 @@ class QueryFacade:
         self.loadcases = CasesQuery(self._raw)
         self.combinations = CombinationsQuery(self._raw)
         self.model = ModelQuery(self._raw)
+        self.results = BarResultsQuery(self._raw)
+        self.shell_results = ShellResultsQuery(self._raw)

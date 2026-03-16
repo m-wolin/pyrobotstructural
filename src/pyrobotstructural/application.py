@@ -30,3 +30,7 @@ class RobotApp:
     @property
     def view(self) -> ViewFacade:
         return self._view
+
+    def calculate(self) -> None:
+        """Triggers calculation of the model."""
+        self._raw.Project.CalcEngine.Calculate()

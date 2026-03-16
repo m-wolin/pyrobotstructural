@@ -127,3 +127,11 @@ class ThicknessType:
     _robot_enum_name = "IRobotThicknessType"
     HOMOGENEOUS = com_member("I_TT_HOMOGENEOUS")
     ORTHOTROPIC = com_member("I_TT_ORTHOTROPIC")
+
+
+class ShellLayer:
+    """Layer through the shell thickness for FE result extraction."""
+    _robot_enum_name = "IRobotFeLayerType"
+    TOP = com_member("I_FLT_UPPER")    # Top (upper) layer
+    MID = com_member("I_FLT_MIDDLE")   # Mid-plane layer
+    BOTTOM = com_member("I_FLT_LOWER") # Bottom (lower) layer
