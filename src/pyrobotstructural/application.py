@@ -31,6 +31,10 @@ class RobotApp:
     def view(self) -> ViewFacade:
         return self._view
 
-    def calculate(self) -> None:
+    def calculate(self, ignore_warnings: bool = False) -> None:
         """Triggers calculation of the model."""
-        self._raw.Project.CalcEngine.Calculate()
+        calc_engine = self._raw.Project.CalcEngine
+        if ignore_warnings:
+            analysis_params = calc_engine.AnalysisParams
+            analysis_params.IgnoreWarnings = True
+        calc_engine.Calculate()

@@ -86,6 +86,39 @@ class ViewManager(_BaseEditor):
             view.SetSize(window_width, window_height)
         view.Redraw(0)
 
+    def _set_display_cases(self, view: Any, cases: str) -> None:
+        """Set which load cases are active for display.
+
+        Parameters
+        ----------
+        cases: str
+            'Simple Cases' — all simple load cases (predefined selection).
+            'Combinations' — all load combinations (predefined selection).
+            'all' — all cases and combinations.
+            '<numbers>' — space-separated case numbers, e.g. '1 2 3'.
+        """
+        structure = self._raw.Project.Structure
+        if cases == "Simple Cases":
+            selection = structure.Selections.CreatePredefined(
+                self._rbt.IRobotPredefinedSelection.I_PS_CASE_SIMPLE_CASES
+            )
+        elif cases == "Combinations":
+            selection = structure.Selections.CreatePredefined(
+                self._rbt.IRobotPredefinedSelection.I_PS_CASE_COMBINATIONS
+            )
+        elif cases == "all":
+            selection = structure.Selections.Create(
+                self._rbt.IRobotObjectType.I_OT_CASE
+            )
+            selection.FromText("all")
+        else:
+            selection = structure.Selections.Create(
+                self._rbt.IRobotObjectType.I_OT_CASE
+            )
+            selection.FromText(cases)
+        view.ParamsDiagram.Cases = selection
+        view.Redraw(0)
+
     # Display
     def display(
         self,
@@ -210,7 +243,11 @@ class ViewManager(_BaseEditor):
         view.Redraw(0)
 
     def loads_display(
-        self, symbols: bool = False, values: bool = False, symbol_size: int | Any = None
+        self,
+        symbols: bool = False,
+        values: bool = False,
+        symbol_size: int | Any = None,
+        cases: str = "Simple Cases",
     ) -> None:
         """Function controls if loads are to be displayed in the view.
 
@@ -222,9 +259,13 @@ class ViewManager(_BaseEditor):
             Load values display
         symbol size: int
             Symbol size in range 1 to 10.
+        cases: str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
 
         """
         view = self.get_current_view()
+        self._set_display_cases(view, cases)
         if symbols:
             view.ParamsDisplay.Set(
                 self._rbt.IRobotViewDisplayAttributes.I_VDA_LOADS_SYMBOLS_CONCENTRATED,
@@ -257,6 +298,7 @@ class ViewManager(_BaseEditor):
             if symbol_size > 10:
                 symbol_size = 10
             view.ParamsDisplay.SymbolSize = symbol_size
+        view.Redraw(0)
 
     # Display displacements
     def display_displacements(
@@ -265,6 +307,7 @@ class ViewManager(_BaseEditor):
         labels: bool = True,
         scale: int = 1,
         exact: bool = False,
+        cases: str = "Simple Cases",
     ) -> None:
         """
         Displays deflection.
@@ -279,9 +322,13 @@ class ViewManager(_BaseEditor):
             Rescale the labels.
         exact: bool
             Trigger exact deformation for rebars.
+        cases: str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
         """
         # make this to work with shell and members
         view = self.get_current_view()
+        self._set_display_cases(view, cases)
         if display:
             view.ParamsDiagram.Set(
                 self._rbt.IRobotViewDiagramResultType.I_VDRT_DEFORMATION_DEFORMATION,
@@ -298,6 +345,7 @@ class ViewManager(_BaseEditor):
                 )
             if scale is not None:
                 self._rbt.ParamsDiagram.SetScale(abs(scale))
+        view.Redraw(0)
 
     # Display bar internal forces
     def display_member_forces(
@@ -309,10 +357,11 @@ class ViewManager(_BaseEditor):
         My: bool,
         Mz: bool,
         labels: bool = True,
-        scale=None,
-        filling=False,
-        pos_neg=False,
-        values_type="all",
+        scale: int | Any = None,
+        filling: bool = False,
+        pos_neg: bool = False,
+        values_type: str = "all",
+        cases: str = "Simple Cases",
     ) -> None:
         """
         Displays member forces as diagram or map.
@@ -341,9 +390,13 @@ class ViewManager(_BaseEditor):
             Positive-negative differentiated.
         values_type: str, optional, default='global'
             Change display type of the values, possible: "global extremes", "all", "local extremes"
+        cases: str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
         """
         possible_values = ("all", "global extremes", "local extremes")
         view = self.get_current_view()
+        self._set_display_cases(view, cases)
         if Fx:
             view.ParamsDiagram.Set(
                 self._rbt.IRobotViewDiagramResultType.I_VDRT_NTM_FX,
@@ -378,8 +431,8 @@ class ViewManager(_BaseEditor):
             view.ParamsDiagram.Descriptions = (
                 self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_LABELS
             )
-        if scale is not None:
-            self._rbt.ParamsDiagram.SetScale(abs(scale))
+        # if scale is not None:
+        #     self._rbt.ParamsDiagram.SetScale = abs(scale)
 
         if filling:
             view.ParamsDiagram.Filling = (
@@ -407,6 +460,7 @@ class ViewManager(_BaseEditor):
             view.ParamsDiagram.Values = self._rbt.IRobotViewDiagramValueType(
                 possible_values.index(values_type)
             )
+        view.Redraw(0)
 
     def display_utilisations(
         self,
@@ -414,6 +468,7 @@ class ViewManager(_BaseEditor):
         labels: bool = True,
         text: bool = False,
         thickness_coeff: int = 5,
+        cases: str = "Simple Cases",
     ) -> None:
         """Display utilisations of members in for of map on members.
         Make sure results from verification are available, otherwise this will fail.
@@ -426,11 +481,14 @@ class ViewManager(_BaseEditor):
             Trigger to display labels.
         text: bool
             Trigger to display text instead of labels. If True, then overwrites labels.
-
         thickness_coeff: int, optional, default=5
             Thickness map coefficient.
+        cases: str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
         """
         view = self.get_current_view()
+        self._set_display_cases(view, cases)
         if display:
             view.ParamsBarMap.CurrentResult = (
                 self._rbt.IRobotViewBarMapResultType.I_VBMRT_DESIGN_RATIO
@@ -450,6 +508,7 @@ class ViewManager(_BaseEditor):
             view.ParamsBarMap.Descriptions = (
                 self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_NONE
             )
+        view.Redraw(0)
 
     def display_stresses(
         self,
@@ -460,6 +519,7 @@ class ViewManager(_BaseEditor):
         labels: bool = False,
         text: bool = False,
         thickness_coeff: int = 5,
+        cases: str = "Simple Cases",
     ) -> None:
         """
         Displays stressess on bar.
@@ -480,9 +540,13 @@ class ViewManager(_BaseEditor):
             Trigger to display text instead of labels. If True, then overwrites labels.
         thickness_coeff: int, optional, default=5
             Thickness map coefficient.
+        cases: str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
         """
 
         view = self.get_current_view()
+        self._set_display_cases(view, cases)
         if display:
             view.ParamsBarMap.MapThicknessCoeff = thickness_coeff
             if s_max:
@@ -516,6 +580,7 @@ class ViewManager(_BaseEditor):
             view.ParamsBarMap.Descriptions = (
                 self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_NONE
             )
+        view.Redraw(0)
 
     def display_reactions(
         self,
@@ -526,6 +591,7 @@ class ViewManager(_BaseEditor):
         My: bool = False,
         Mz: bool = False,
         local_system: bool = False,
+        cases: str = "Simple Cases",
     ) -> None:
         # It might be required to use none and value, because once set to True, they will stay sitched on?
         """Display reactions
@@ -546,8 +612,12 @@ class ViewManager(_BaseEditor):
             Trigger Fx reaction display.
         local_system: bool, optional, default = False
             Trigger local system reactions display.
+        cases: str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
         """
         view = self.get_current_view()
+        self._set_display_cases(view, cases)
         if any(Rx, Ry, Rz):
             view.ParamsDiagram.Set(
                 self._rbt.IRobotViewDiagramResultType.I_VDRT_REACTION_FORCES,
@@ -600,6 +670,86 @@ class ViewManager(_BaseEditor):
             view.ParamsDiagram.ReactionsInLocalSystem = True
         else:
             view.ParamsDiagram.ReactionsInLocalSystem = False
+        view.Redraw(0)
+
+    def restore_default(self) -> None:
+        """Apply a clean default view state.
+
+        Resets every display attribute to a neutral
+        starting point: structure visible, all result diagrams off, no load
+        symbols, no annotations except support symbols.
+
+        """
+        view = self.get_current_view()
+        pd = view.ParamsDisplay
+        diag = view.ParamsDiagram
+        bmap = view.ParamsBarMap
+        VDA = self._rbt.IRobotViewDisplayAttributes
+        VDRT = self._rbt.IRobotViewDiagramResultType
+
+        # --- Structure annotations ---
+        pd.Set(VDA.I_VDA_STRUCTURE_NODE_NUMBERS, False)
+        pd.Set(VDA.I_VDA_STRUCTURE_BAR_NUMBERS, False)
+        pd.Set(VDA.I_VDA_SECTIONS_SHAPE, False)
+        pd.Set(VDA.I_VDA_FE_PANEL_INTERIOR, True)
+        pd.Set(VDA.I_VDA_OTHER_DIMENSION_LINES, False)
+        pd.Set(VDA.I_VDA_ADVANCED_OFFSETS, False)
+        pd.Set(VDA.I_VDA_STRUCTURE_SUPPORT_SYMBOLS, True)
+        pd.Set(VDA.I_VDA_STRUCTURE_SUPPORT_CODES, False)
+        pd.Set(VDA.I_VDA_ADVANCED_RELEASE_SYMBOLS, False)
+        pd.Set(VDA.I_VDA_ADVANCED_RELEASE_CODES, False)
+        pd.Set(VDA.I_VDA_FE_COLOR_LEGEND, False)
+        pd.Set(VDA.I_VDA_STRUCTURE_LOCAL_SYSTEM_BARS, False)
+        pd.Set(VDA.I_VDA_STRUCTURE_LOCAL_SYSTEM_PANELS, False)
+
+        # --- Load symbols: all off ---
+        pd.Set(VDA.I_VDA_LOADS_SYMBOLS_CONCENTRATED, False)
+        pd.Set(VDA.I_VDA_LOADS_SYMBOLS_LINEAR, False)
+        pd.Set(VDA.I_VDA_LOADS_SYMBOLS_PLANAR, False)
+        pd.Set(VDA.I_VDA_LOADS_SYMBOLS_UNIFORM_SIZE, False)
+        pd.Set(VDA.I_VDA_LOADS_AUTOMATICALLY, False)
+        pd.Set(VDA.I_VDA_LOADS_VALUES, False)
+
+        # --- Display style ---
+        pd.HiddenLines = self._rbt.IRobotViewHiddenLinesDisplayType.I_VHLDT_NONE
+        pd.SymbolSize = 3
+
+        # --- Diagram result types: all off ---
+        for res_type in (
+            VDRT.I_VDRT_NTM_FX,
+            VDRT.I_VDRT_NTM_FY,
+            VDRT.I_VDRT_NTM_FZ,
+            VDRT.I_VDRT_NTM_MX,
+            VDRT.I_VDRT_NTM_MY,
+            VDRT.I_VDRT_NTM_MZ,
+            VDRT.I_VDRT_DEFORMATION_DEFORMATION,
+            VDRT.I_VDRT_DEFORMATION_EXACT,
+            VDRT.I_VDRT_REACTION_FORCES,
+            VDRT.I_VDRT_REACTION_MOMENTS,
+            VDRT.I_VDRT_REACTION_FX,
+            VDRT.I_VDRT_REACTION_FY,
+            VDRT.I_VDRT_REACTION_FZ,
+            VDRT.I_VDRT_REACTION_MX,
+            VDRT.I_VDRT_REACTION_MY,
+            VDRT.I_VDRT_REACTION_MZ,
+            VDRT.I_VDRT_REACTION_DESC,
+        ):
+            diag.Set(res_type, False)
+
+        # --- Diagram style ---
+        diag.Descriptions = self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_LABELS
+        diag.Filling = self._rbt.IRobotViewDiagramFillingType.I_VDFT_FENCE
+        diag.PositiveNegative = (
+            self._rbt.IRobotViewDiagramSignDifferType.I_VDSDT_UNDIFFERENTIATED
+        )
+        diag.ReactionsInLocalSystem = False
+
+        # --- Bar map: off ---
+        bmap.CurrentResult = self._rbt.IRobotViewBarMapResultType.I_VBMRT_NOTHING
+        bmap.Descriptions = self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_NONE
+        bmap.MapThicknessCoeff = 5.0
+
+        view.Redraw(0)
 
     def display_shell_forces(self, Mxx, Myy, Mxy, Qxx, Qyy, results_lcs=0) -> None:
         pass

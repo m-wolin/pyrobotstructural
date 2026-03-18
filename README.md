@@ -1,17 +1,17 @@
 # pyrobotstructural
 
-A Python wrapper for [Autodesk Robot Structural Analysis Professional](https://www.autodesk.com/products/robot-structural-analysis/overview), providing a clean API for scripting structural models via the Robot COM interface.
+An **UNOFFICIAL** Python wrapper for [Autodesk Robot Structural Analysis Professional](https://www.autodesk.com/products/robot-structural-analysis/overview), providing a clean API for scripting structural models via the Robot COM interface.
 
 ## Requirements
 
 - Windows
-- Autodesk Robot Structural Analysis Professional (2023 or later)
+- Autodesk Robot Structural Analysis Professional (2018 or later, although any version should work)
 - Python 3.14+
 
 ## Installation
 
 ```bash
-uv sync
+pip install pyrobotstructural
 ```
 
 ## Getting Started
