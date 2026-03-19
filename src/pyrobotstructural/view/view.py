@@ -98,26 +98,21 @@ class ViewManager(_BaseEditor):
             '<numbers>' — space-separated case numbers, e.g. '1 2 3'.
         """
         structure = self._raw.Project.Structure
+        case_sel = view.Selection.Get(self._rbt.IRobotObjectType.I_OT_CASE)
         if cases == "Simple Cases":
-            selection = structure.Selections.CreatePredefined(
+            predefined = structure.Selections.CreatePredefined(
                 self._rbt.IRobotPredefinedSelection.I_PS_CASE_SIMPLE_CASES
             )
+            case_sel.FromText(predefined.ToText())
         elif cases == "Combinations":
-            selection = structure.Selections.CreatePredefined(
+            predefined = structure.Selections.CreatePredefined(
                 self._rbt.IRobotPredefinedSelection.I_PS_CASE_COMBINATIONS
             )
+            case_sel.FromText(predefined.ToText())
         elif cases == "all":
-            selection = structure.Selections.Create(
-                self._rbt.IRobotObjectType.I_OT_CASE
-            )
-            selection.FromText("all")
+            case_sel.FromText("all")
         else:
-            selection = structure.Selections.Create(
-                self._rbt.IRobotObjectType.I_OT_CASE
-            )
-            selection.FromText(cases)
-        view.ParamsDiagram.Cases = selection
-        view.Redraw(0)
+            case_sel.FromText(cases)
 
     # Display
     def display(
@@ -244,6 +239,7 @@ class ViewManager(_BaseEditor):
 
     def loads_display(
         self,
+        display: bool = True,
         symbols: bool = False,
         values: bool = False,
         symbol_size: int | Any = None,
@@ -253,6 +249,8 @@ class ViewManager(_BaseEditor):
 
         Parameters
         ----------
+        display: bool, optional, default=True
+            If False, all load symbols and values are hidden regardless of other parameters.
         symbols: bool
             Load symbols display
         values: bool
@@ -266,6 +264,16 @@ class ViewManager(_BaseEditor):
         """
         view = self.get_current_view()
         self._set_display_cases(view, cases)
+        if not display:
+            VDA = self._rbt.IRobotViewDisplayAttributes
+            view.ParamsDisplay.Set(VDA.I_VDA_LOADS_SYMBOLS_CONCENTRATED, False)
+            view.ParamsDisplay.Set(VDA.I_VDA_LOADS_SYMBOLS_LINEAR, False)
+            view.ParamsDisplay.Set(VDA.I_VDA_LOADS_SYMBOLS_PLANAR, False)
+            view.ParamsDisplay.Set(VDA.I_VDA_LOADS_SYMBOLS_UNIFORM_SIZE, False)
+            view.ParamsDisplay.Set(VDA.I_VDA_LOADS_AUTOMATICALLY, False)
+            view.ParamsDisplay.Set(VDA.I_VDA_LOADS_VALUES, False)
+            view.Redraw(0)
+            return
         if symbols:
             view.ParamsDisplay.Set(
                 self._rbt.IRobotViewDisplayAttributes.I_VDA_LOADS_SYMBOLS_CONCENTRATED,
@@ -343,19 +351,29 @@ class ViewManager(_BaseEditor):
                 view.ParamsDiagram.Descriptions = (
                     self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_LABELS
                 )
-            if scale is not None:
-                self._rbt.ParamsDiagram.SetScale(abs(scale))
+            # if scale is not None:
+            #     self._rbt.ParamsDiagram.SetScale(abs(scale))
+        else:
+            view.ParamsDiagram.Set(
+                self._rbt.IRobotViewDiagramResultType.I_VDRT_DEFORMATION_DEFORMATION,
+                False,
+            )
+            view.ParamsDiagram.Set(
+                self._rbt.IRobotViewDiagramResultType.I_VDRT_DEFORMATION_EXACT,
+                False,
+            )
         view.Redraw(0)
 
     # Display bar internal forces
     def display_member_forces(
         self,
-        Fx: bool,
-        Fy: bool,
-        Fz: bool,
-        Mx: bool,
-        My: bool,
-        Mz: bool,
+        display: bool = True,
+        Fx: bool = False,
+        Fy: bool = False,
+        Fz: bool = False,
+        Mx: bool = False,
+        My: bool = False,
+        Mz: bool = False,
         labels: bool = True,
         scale: int | Any = None,
         filling: bool = False,
@@ -368,18 +386,20 @@ class ViewManager(_BaseEditor):
 
         Parameters
         ----------
+        display: bool, optional, default=True
+            If False, all member force diagrams are hidden regardless of other parameters.
         Fx: bool
             Trigger Fx forces display.
         Fy: bool
-            Trigger Fx forces display.
+            Trigger Fy forces display.
         Fz: bool
-            Trigger Fx forces display.
+            Trigger Fz forces display.
         Mx: bool
-            Trigger Fx forces display.
+            Trigger Mx forces display.
         My: bool
-            Trigger Fx forces display.
+            Trigger My forces display.
         Mz: bool
-            Trigger Fx forces display.
+            Trigger Mz forces display.
         labels: bool, optional
             Trigger to display labels.
         scale: int, optional
@@ -388,7 +408,7 @@ class ViewManager(_BaseEditor):
             Filling of the diagram.
         pos_neg: bool, optional
             Positive-negative differentiated.
-        values_type: str, optional, default='global'
+        values_type: str, optional, default='all'
             Change display type of the values, possible: "global extremes", "all", "local extremes"
         cases: str, optional, default='Simple Cases'
             Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
@@ -397,6 +417,19 @@ class ViewManager(_BaseEditor):
         possible_values = ("all", "global extremes", "local extremes")
         view = self.get_current_view()
         self._set_display_cases(view, cases)
+        if not display:
+            VDRT = self._rbt.IRobotViewDiagramResultType
+            for res_type in (
+                VDRT.I_VDRT_NTM_FX,
+                VDRT.I_VDRT_NTM_FY,
+                VDRT.I_VDRT_NTM_FZ,
+                VDRT.I_VDRT_NTM_MX,
+                VDRT.I_VDRT_NTM_MY,
+                VDRT.I_VDRT_NTM_MZ,
+            ):
+                view.ParamsDiagram.Set(res_type, False)
+            view.Redraw(0)
+            return
         if Fx:
             view.ParamsDiagram.Set(
                 self._rbt.IRobotViewDiagramResultType.I_VDRT_NTM_FX,
@@ -494,6 +527,12 @@ class ViewManager(_BaseEditor):
                 self._rbt.IRobotViewBarMapResultType.I_VBMRT_DESIGN_RATIO
             )
             view.ParamsBarMap.MapThicknessCoeff = thickness_coeff
+        else:
+            view.ParamsBarMap.CurrentResult = (
+                self._rbt.IRobotViewBarMapResultType.I_VBMRT_NOTHING
+            )
+            view.Redraw(0)
+            return
         if labels and text:
             labels = False
         if labels:
@@ -565,6 +604,8 @@ class ViewManager(_BaseEditor):
             view.ParamsBarMap.CurrentResult = (
                 self._rbt.IRobotViewBarMapResultType.I_VBMRT_NOTHING
             )
+            view.Redraw(0)
+            return
 
         if labels and text:
             labels = False
@@ -584,6 +625,7 @@ class ViewManager(_BaseEditor):
 
     def display_reactions(
         self,
+        display: bool = True,
         Rx: bool = False,
         Ry: bool = False,
         Rz: bool = False,
@@ -593,23 +635,24 @@ class ViewManager(_BaseEditor):
         local_system: bool = False,
         cases: str = "Simple Cases",
     ) -> None:
-        # It might be required to use none and value, because once set to True, they will stay sitched on?
         """Display reactions
 
         Parameters
         ----------
-        Fx: bool
-            Trigger Fx reaction display.
-        Fy: bool
-            Trigger Fx reaction display.
-        Fz: bool
-            Trigger Fx reaction display.
+        display: bool, optional, default=True
+            If False, all reaction diagrams are hidden regardless of other parameters.
+        Rx: bool
+            Trigger Rx reaction display.
+        Ry: bool
+            Trigger Ry reaction display.
+        Rz: bool
+            Trigger Rz reaction display.
         Mx: bool
-            Trigger Fx reaction display.
+            Trigger Mx reaction display.
         My: bool
-            Trigger Fx reaction display.
+            Trigger My reaction display.
         Mz: bool
-            Trigger Fx reaction display.
+            Trigger Mz reaction display.
         local_system: bool, optional, default = False
             Trigger local system reactions display.
         cases: str, optional, default='Simple Cases'
@@ -618,7 +661,23 @@ class ViewManager(_BaseEditor):
         """
         view = self.get_current_view()
         self._set_display_cases(view, cases)
-        if any(Rx, Ry, Rz):
+        if not display:
+            VDRT = self._rbt.IRobotViewDiagramResultType
+            for res_type in (
+                VDRT.I_VDRT_REACTION_FORCES,
+                VDRT.I_VDRT_REACTION_MOMENTS,
+                VDRT.I_VDRT_REACTION_FX,
+                VDRT.I_VDRT_REACTION_FY,
+                VDRT.I_VDRT_REACTION_FZ,
+                VDRT.I_VDRT_REACTION_MX,
+                VDRT.I_VDRT_REACTION_MY,
+                VDRT.I_VDRT_REACTION_MZ,
+                VDRT.I_VDRT_REACTION_DESC,
+            ):
+                view.ParamsDiagram.Set(res_type, False)
+            view.Redraw(0)
+            return
+        if any([Rx, Ry, Rz]):
             view.ParamsDiagram.Set(
                 self._rbt.IRobotViewDiagramResultType.I_VDRT_REACTION_FORCES,
                 True,
@@ -642,7 +701,7 @@ class ViewManager(_BaseEditor):
                 self._rbt.IRobotViewDiagramResultType.I_VDRT_REACTION_DESC,
                 True,
             )
-        if any(Mx, My, Mz):
+        if any([Mx, My, Mz]):
             view.ParamsDiagram.Set(
                 self._rbt.IRobotViewDiagramResultType.I_VDRT_REACTION_MOMENTS,
                 True,
@@ -749,6 +808,48 @@ class ViewManager(_BaseEditor):
         bmap.Descriptions = self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_NONE
         bmap.MapThicknessCoeff = 5.0
 
+        view.Redraw(0)
+
+    def clear_results(self) -> None:
+        """Hide all results currently displayed in the view.
+
+        Turns off member force diagrams, deformation diagrams, reaction diagrams,
+        member map results (utilisations, stresses), and shell/FE map results.
+        Structure display settings (node numbers, supports, etc.) are not affected.
+        """
+        view = self.get_current_view()
+        diag = view.ParamsDiagram
+        VDRT = self._rbt.IRobotViewDiagramResultType
+
+        for res_type in (
+            VDRT.I_VDRT_NTM_FX,
+            VDRT.I_VDRT_NTM_FY,
+            VDRT.I_VDRT_NTM_FZ,
+            VDRT.I_VDRT_NTM_MX,
+            VDRT.I_VDRT_NTM_MY,
+            VDRT.I_VDRT_NTM_MZ,
+            VDRT.I_VDRT_DEFORMATION_DEFORMATION,
+            VDRT.I_VDRT_DEFORMATION_EXACT,
+            VDRT.I_VDRT_REACTION_FORCES,
+            VDRT.I_VDRT_REACTION_MOMENTS,
+            VDRT.I_VDRT_REACTION_FX,
+            VDRT.I_VDRT_REACTION_FY,
+            VDRT.I_VDRT_REACTION_FZ,
+            VDRT.I_VDRT_REACTION_MX,
+            VDRT.I_VDRT_REACTION_MY,
+            VDRT.I_VDRT_REACTION_MZ,
+            VDRT.I_VDRT_REACTION_DESC,
+        ):
+            diag.Set(res_type, False)
+
+        view.ParamsBarMap.CurrentResult = (
+            self._rbt.IRobotViewBarMapResultType.I_VBMRT_NOTHING
+        )
+        view.ParamsFeMap.CurrentResult = (
+            self._rbt.IRobotViewFeMapResultType(
+                -1, True
+            )  # might be required to change to numeric value -1
+        )
         view.Redraw(0)
 
     def display_shell_forces(self, Mxx, Myy, Mxy, Qxx, Qyy, results_lcs=0) -> None:
