@@ -12,6 +12,7 @@ class LoadEditor(_BaseEditor):
         self._structure = self._raw.Project.Structure
         self._labels = self._structure.Labels
         self._cases = self._structure.Cases
+        self._case_cache: dict[str, Any] = {}
 
     def add_self_weight(
         self, case_name: str, objects: int | str, factors: list = [0, 0, -1]
@@ -393,7 +394,11 @@ class LoadEditor(_BaseEditor):
         pass
 
     def _get_case_by_name(self, case_name: str) -> Any:
-        """Private function to get simple loadcase by name
+        """Private function to get simple loadcase by name.
+
+        Results are cached after the first lookup. The cache is keyed by name
+        so repeated calls with the same case_name cost a single dict lookup
+        instead of a full COM collection scan.
 
         Parameters
         ----------
@@ -404,9 +409,14 @@ class LoadEditor(_BaseEditor):
         ----------
             IRobotCase
         """
+        if case_name in self._case_cache:
+            return self._case_cache[case_name]
         cases = self._cases.GetAll()
         for i in range(1, cases.Count + 1):
             lcase = self._rbt.IRobotCase(cases.Get(i))
             if lcase.Type == self._rbt.IRobotCaseType.I_CT_SIMPLE:
                 if lcase.Name == case_name:
-                    return self._rbt.IRobotSimpleCase(lcase)
+                    result = self._rbt.IRobotSimpleCase(lcase)
+                    self._case_cache[case_name] = result
+                    return result
+        return None

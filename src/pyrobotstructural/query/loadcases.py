@@ -15,7 +15,7 @@ class CasesQuery(_BaseEditor):
         """
         return self._structure.Cases.GetAll()
 
-    def get_simple_loadcase(self, case_index: int, number: int = None) -> Any:
+    def get_simple_loadcase(self, case_index: int = None, number: int = None) -> Any:
         """
 
         Parameters

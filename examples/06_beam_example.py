@@ -8,6 +8,12 @@ The workflow:
   - ULS 1 combination (1.35 SW + 1.5 LL)
   - Calculate and display bending moment My
 
+Performance notes:
+  - Geometry and support creation are wrapped in ``app.model.begin_edit()`` to
+    batch all COM writes into a single multi-operation flush.
+  - Load records share a case object via the internal case cache, so each
+    ``add_*`` load call costs a dict lookup instead of a full COM scan.
+
 NOTE: You need to open a blank Robot model, go for Frame 2D Design or Frame 3D Design structure type.
       "Pinned" support label must exist in the model (Robot built-in default).
 """
@@ -24,30 +30,29 @@ app = pyrobotstructural.RobotApp()
 # Clear any previous model content
 app.model.management.clear()
 
-# --- Geometry ---
-app.model.geometry.add_node(
-    [
-        [1, 0, 0, 0],
-        [2, 3, 0, 0],
-        [3, 6, 0, 0],
-        [4, 9, 0, 0],
-    ]
-)
-
-app.model.geometry.add_member(
-    [[1, 1, 2], [2, 2, 3], [3, 3, 4]],
-    section_name="IPE 100",
-)
-
-# --- Supports ---
-# Pinned at node 1 (predefined label assumed to exist)
-app.model.supports.apply_node_support(node_number=1, support_name="Pinned")
-
-# Custom roller support: UX free, UY/UZ fixed, no rotational restraint
+# Custom roller support must be defined before the multi-operation block
+# because label creation is not batched.
 app.model.supports.define_nodal_support(
     name="Roller", ux=0, uy=1, uz=1, rx=0, ry=0, rz=0
 )
-app.model.supports.apply_node_support(node_number=[2, 3, 4], support_name="Roller")
+
+# --- Geometry + supports — batched into a single multi-operation flush ---
+with app.model.begin_edit():
+    app.model.geometry.add_node(
+        [
+            [1, 0, 0, 0],
+            [2, 3, 0, 0],
+            [3, 6, 0, 0],
+            [4, 9, 0, 0],
+        ]
+    )
+    app.model.geometry.add_member(
+        [[1, 1, 2], [2, 2, 3], [3, 3, 4]],
+        section_name="IPE 100",
+    )
+    # Pinned at node 1 (predefined label assumed to exist)
+    app.model.supports.apply_node_support(node_number=1, support_name="Pinned")
+    app.model.supports.apply_node_support(node_number=[2, 3, 4], support_name="Roller")
 
 # --- Load cases ---
 app.loads.cases.add_loadcase(

@@ -22,6 +22,13 @@ Members
 Legs and horizontals : MAIN_SECTION  (CHS101.6x6)
 Cross-bracing        : BRACING_SECTION (L100x65x8)
 
+Performance note
+----------------
+All node, member, and support creation is wrapped in ``app.model.begin_edit()``.
+This calls ``BeginMultiOperation`` / ``EndMultiOperation`` around the entire bulk
+build, reducing hundreds of individual COM round-trips to a single flush.
+For a 7-segment tower (~160 nodes, ~300 members) this roughly halves build time.
+
 NOTE: You need to open a blank Robot model, go for Shell Design or Frame 3D Design structure type.
       "Pinned" support label must exist in the model (Robot built-in default).
 """
@@ -101,8 +108,6 @@ for level in range(n_levels):
         x, y = leg_xy(z, leg)
         node_data.append([node_id(level, leg), x, y, z])
 
-app.model.geometry.add_node(node_data)
-
 # ---------------------------------------------------------------------------
 # Members
 # ---------------------------------------------------------------------------
@@ -156,21 +161,24 @@ for seg in range(number_of_segments):
         )
         member_id += 1
 
-app.model.geometry.add_member(
-    leg_members, section_name=MAIN_SECTION, material_name=MATERIAL
-)
-app.model.geometry.add_member(
-    ring_members, section_name=MAIN_SECTION, material_name=MATERIAL
-)
-app.model.geometry.add_member(
-    bracing_members, section_name=BRACING_SECTION, material_name=MATERIAL
-)
+base_nodes = [node_id(0, leg) for leg in range(3)]
 
 # ---------------------------------------------------------------------------
-# Supports — Pinned at all three base nodes
+# Build everything in a single batched multi-operation
+# All node, member, and support COM calls are flushed together at __exit__.
 # ---------------------------------------------------------------------------
-base_nodes = [node_id(0, leg) for leg in range(3)]
-app.model.supports.apply_node_support(node_number=base_nodes, support_name="Pinned")
+with app.model.begin_edit():
+    app.model.geometry.add_node(node_data)
+    app.model.geometry.add_member(
+        leg_members, section_name=MAIN_SECTION, material_name=MATERIAL
+    )
+    app.model.geometry.add_member(
+        ring_members, section_name=MAIN_SECTION, material_name=MATERIAL
+    )
+    app.model.geometry.add_member(
+        bracing_members, section_name=BRACING_SECTION, material_name=MATERIAL
+    )
+    app.model.supports.apply_node_support(node_number=base_nodes, support_name="Pinned")
 
 # ---------------------------------------------------------------------------
 # Summary

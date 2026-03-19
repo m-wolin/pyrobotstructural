@@ -1,4 +1,5 @@
 from __future__ import annotations
+from contextlib import contextmanager
 from typing import Any, Union
 from .._base import _BaseEditor
 from ..enums import LabelType, ThicknessType
@@ -11,6 +12,24 @@ class GeometryEditor(_BaseEditor):
         self._project = self._raw.Project
         self._structure = self._project.Structure
         self._labels = self._structure.Labels
+
+    @contextmanager
+    def begin_edit(self):
+        """Context manager that batches all structure modifications into a
+        single multi-operation flush, dramatically reducing COM overhead for
+        large bulk operations.
+
+        Usage
+        -----
+        with app.model.geometry.begin_edit():
+            app.model.geometry.add_node([[1, 0, 0, 0], [2, 1, 0, 0]])
+            app.model.geometry.add_member([[1, 1, 2]], section_name="IPE 100")
+        """
+        self._structure.BeginMultiOperation()
+        try:
+            yield
+        finally:
+            self._structure.EndMultiOperation()
 
     def add_node(
         self,
@@ -58,8 +77,12 @@ class GeometryEditor(_BaseEditor):
                     f"Got shape {data.shape}."
                 )
 
-            for row in data:
-                nodes.Create(int(row[0]), float(row[1]), float(row[2]), float(row[3]))
+            self._structure.BeginMultiOperation()
+            try:
+                for row in data:
+                    nodes.Create(int(row[0]), float(row[1]), float(row[2]), float(row[3]))
+            finally:
+                self._structure.EndMultiOperation()
 
         # --- single node ---
         elif isinstance(number_or_data, (int, np.integer)):
@@ -146,21 +169,25 @@ class GeometryEditor(_BaseEditor):
             )
 
         # --- create all bars, then apply shared labels ---
-        for number, start, end in members:
-            self._structure.Bars.Create(number, start, end)
-            bar = self._structure.Bars.Get(number)
+        self._structure.BeginMultiOperation()
+        try:
+            for number, start, end in members:
+                self._structure.Bars.Create(number, start, end)
+                bar = self._structure.Bars.Get(number)
 
-            if section_name is not None:
-                bar.SetLabel(LabelType.BAR_SECTION, section_name)
-            if material_name is not None:
-                bar.SetLabel(LabelType.MATERIAL, material_name)
-            if release_name is not None:
-                bar.SetLabel(LabelType.BAR_RELEASE, release_name)
-            if tension_comp is not None:
-                tc_value = 1 if tension_comp == "tension" else 2
-                bar.TensionCompression = self._raw.IRbotBarTensionCompression(tc_value)
-            if truss:
-                bar.TrussBar = True
+                if section_name is not None:
+                    bar.SetLabel(LabelType.BAR_SECTION, section_name)
+                if material_name is not None:
+                    bar.SetLabel(LabelType.MATERIAL, material_name)
+                if release_name is not None:
+                    bar.SetLabel(LabelType.BAR_RELEASE, release_name)
+                if tension_comp is not None:
+                    tc_value = 1 if tension_comp == "tension" else 2
+                    bar.TensionCompression = self._raw.IRbotBarTensionCompression(tc_value)
+                if truss:
+                    bar.TrussBar = True
+        finally:
+            self._structure.EndMultiOperation()
 
     def add_contour(
         self,

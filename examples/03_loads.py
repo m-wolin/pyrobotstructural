@@ -1,5 +1,9 @@
 """
 This example shows how to define load cases, loads and load combinations.
+
+Performance note: load cases are resolved by name via an internal cache.
+The first ``add_*`` call for a given case name scans the COM collection once;
+all subsequent calls for the same case cost only a dict lookup.
 """
 
 import pyrobotstructural

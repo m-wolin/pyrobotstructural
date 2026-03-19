@@ -13,3 +13,17 @@ class ModelFacade:
         self.sections = SectionEditor(self._raw)
         self.supports = SupportEditor(self._raw)
         self.management = ModelManager(self._raw)
+
+    def begin_edit(self):
+        """Context manager that batches all structure modifications into a
+        single multi-operation flush.  Delegates to
+        ``app.model.geometry.begin_edit()``.
+
+        Usage
+        -----
+        with app.model.begin_edit():
+            app.model.geometry.add_node(nodes_array)
+            app.model.geometry.add_member(members_array, section_name="IPE 100")
+            app.model.supports.apply_node_support([1, 2], "Pinned")
+        """
+        return self.geometry.begin_edit()

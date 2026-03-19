@@ -19,14 +19,15 @@ class NodesQuery(_BaseEditor):
 
         Returns
         ----------
-            IRobotCollection of nodes
+            IRobotCollection of nodes (exclude_calc_nodes=False), or
+            list[IRobotNode] (exclude_calc_nodes=True)
         """
         if exclude_calc_nodes:
             all_nodes = self._nodes.GetAll()
             nodes = []
             for node_index in range(1, all_nodes.Count + 1):
-                node = self.get_node(node_index)
-                if not node.IsCalc:  # IRobotNode object
+                node = self._rbt.IRobotNode(all_nodes.Get(node_index))
+                if not node.IsCalc:
                     nodes.append(node)
             return nodes
         else:
@@ -45,11 +46,16 @@ class NodesQuery(_BaseEditor):
         ----------
             list[node_number, X, Y, Z]
         """
-        all_nodes = self.get_all(exclude_calc_nodes=exclude_calc_nodes)
         node_coords = []
-        for node_index in range(1, all_nodes.Count + 1):
-            node = self.get_node(node_index)
-            node_coords.append([node.Number, node.X, node.Y, node.Z])
+        if exclude_calc_nodes:
+            # get_all returns a plain list when exclude_calc_nodes=True
+            for node in self.get_all(exclude_calc_nodes=True):
+                node_coords.append([node.Number, node.X, node.Y, node.Z])
+        else:
+            all_nodes = self._nodes.GetAll()
+            for node_index in range(1, all_nodes.Count + 1):
+                node = self._rbt.IRobotNode(all_nodes.Get(node_index))
+                node_coords.append([node.Number, node.X, node.Y, node.Z])
         return node_coords
 
     def get_node(self, index: int, by_number: bool = False) -> Any:

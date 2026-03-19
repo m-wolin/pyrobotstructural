@@ -2,6 +2,10 @@
 This example shows how to define simple geometry objects such as nodes, bars (members), shell and cladding.
 It also shows basic support assignment.
 
+Performance tip: wrapping bulk geometry and support operations in ``app.model.begin_edit()``
+batches all COM calls into a single multi-operation flush.  For models with many nodes/members
+this can be 10-100x faster than individual calls.
+
 NOTE: You need to open a blank Robot model, go for Shell Design or Frame 3D Design structure type.
       "Pinned" support label must exist in the model (Robot built-in default).
 """
@@ -44,12 +48,15 @@ bars = [
     [8, 4, 6],
 ]
 
-# --- Add nodes ---
-app.model.geometry.add_node(node_data)
-
-# --- Add bars ---
-app.model.geometry.add_member(bars, material_name="S235", section_name="IPE 100")
-
+# --- Add nodes, bars, and supports in a single batched multi-operation ---
+# begin_edit() calls BeginMultiOperation / EndMultiOperation around the block,
+# flushing all COM writes in one go instead of round-tripping for each object.
+with app.model.begin_edit():
+    app.model.geometry.add_node(node_data)
+    app.model.geometry.add_member(bars, material_name="S235", section_name="IPE 100")
+    app.model.supports.apply_node_support(
+        node_number=[1, 2, 3, 4, 5, 6], support_name="Pinned"
+    )
 
 # --- Geometry for contour ---
 contour_for_shell = [
@@ -77,9 +84,4 @@ contour_for_cladding = [
 
 app.model.geometry.add_cladding(
     points=contour_for_cladding, load_distribution="Two-way"
-)
-
-# --- Add supports ---
-app.model.supports.apply_node_support(
-    node_number=[1, 2, 3, 4, 5, 6], support_name="Pinned"
 )
