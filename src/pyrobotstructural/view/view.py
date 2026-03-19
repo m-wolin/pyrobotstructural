@@ -623,6 +623,65 @@ class ViewManager(_BaseEditor):
             )
         view.Redraw(0)
 
+    def display_member_stresses(
+        self,
+        display: bool = True,
+        s_max: bool = False,
+        s_min: bool = False,
+        labels: bool = True,
+        text: bool = False,
+        cases: str = "Simple Cases",
+    ) -> None:
+        """
+        Displays member stresses as diagrams along members via ParamsDiagram.
+
+        Parameters
+        ----------
+        display: bool, optional, default=True
+            If False, all member stress diagrams are hidden regardless of other parameters.
+        s_max: bool
+            Display maximum normal stress diagram.
+        s_min: bool
+            Display minimum normal stress diagram.
+        labels: bool, optional, default=True
+            Trigger to display labels.
+        text: bool, optional, default=False
+            Trigger to display text instead of labels. If True, overwrites labels.
+        cases: str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
+        """
+        view = self.get_current_view()
+        self._set_display_cases(view, cases)
+        VDRT = self._rbt.IRobotViewDiagramResultType
+        if not display:
+            for res_type in (
+                VDRT.I_VDRT_STRESS_S_MAX,
+                VDRT.I_VDRT_STRESS_S_MIN,
+            ):
+                view.ParamsDiagram.Set(res_type, False)
+            view.Redraw(0)
+            return
+        if s_max:
+            view.ParamsDiagram.Set(VDRT.I_VDRT_STRESS_S_MAX, True)
+        if s_min:
+            view.ParamsDiagram.Set(VDRT.I_VDRT_STRESS_S_MIN, True)
+        if labels and text:
+            labels = False
+        if labels:
+            view.ParamsDiagram.Descriptions = (
+                self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_LABELS
+            )
+        elif text:
+            view.ParamsDiagram.Descriptions = (
+                self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_TEXT
+            )
+        else:
+            view.ParamsDiagram.Descriptions = (
+                self._rbt.IRobotViewDiagramDescriptionType.I_VDDT_NONE
+            )
+        view.Redraw(0)
+
     def display_reactions(
         self,
         display: bool = True,

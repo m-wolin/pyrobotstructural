@@ -16,7 +16,7 @@ class BarsQuery(_BaseEditor):
         ----------
             IRobotBarsServer: Server that manages bars defined in stucture
         """
-        return self.structure.Bars.GetAll()
+        return self._structure.Bars.GetAll()
 
     def get_bar(self, bar_number: int, include_superbars=False) -> Any:
         """

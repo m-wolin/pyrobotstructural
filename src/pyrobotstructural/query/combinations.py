@@ -27,7 +27,7 @@ class CombinationsQuery(_BaseEditor):
             2: "ALS",
             3: "SPC",
         }
-        all_cases = self.get_all_load_cases()
+        all_cases = self._structure.Cases.GetAll()
         lcombs = []
         for i in range(1, all_cases.Count + 1):  # loop1
             lcase = self._rbt.IRobotCase(all_cases.Get(i))
@@ -62,7 +62,7 @@ class CombinationsQuery(_BaseEditor):
         ----------
         IRobotCase
         """
-        all_cases = self.get_all()
+        all_cases = self._structure.Cases.GetAll()
         if number is not None:
             for i in range(1, all_cases.Count + 1):  # loop1
                 lcase = self._rbt.IRobotCase(all_cases.Get(i))

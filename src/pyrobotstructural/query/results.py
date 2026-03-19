@@ -120,7 +120,9 @@ class BarResultsQuery(_BaseEditor):
     # Forces
     # ------------------------------------------------------------------
 
-    def get_forces(self, bar_number: int, case_number: int, pos: float = 0.5) -> MemberForces:
+    def get_forces(
+        self, bar_number: int, case_number: int, position: float = 0.5
+    ) -> MemberForces:
         """Return internal forces at a single position along the bar.
 
         Parameters
@@ -129,7 +131,7 @@ class BarResultsQuery(_BaseEditor):
             Robot bar number.
         case_number : int
             Load case or combination number.
-        pos : float, optional
+        position : float, optional
             Relative position along the bar, ``0.0`` (start) to ``1.0``
             (end). Defaults to ``0.5`` (midspan).
 
@@ -139,7 +141,9 @@ class BarResultsQuery(_BaseEditor):
             Internal forces at the requested position.
         """
         server = self._bar_result_server()
-        data = self._rbt.IRobotBarForceData(server.Forces.Value(bar_number, case_number, pos))
+        data = self._rbt.IRobotBarForceData(
+            server.Forces.Value(bar_number, case_number, position)
+        )
         return MemberForces(
             fx=data.FX,
             fy=data.FY,
@@ -178,14 +182,16 @@ class BarResultsQuery(_BaseEditor):
             data = self._rbt.IRobotBarForceData(
                 server.Forces.ValueByNPoints(bar_number, case_number, n_points, i)
             )
-            results.append(MemberForces(
-                fx=data.FX,
-                fy=data.FY,
-                fz=data.FZ,
-                mx=data.MX,
-                my=data.MY,
-                mz=data.MZ,
-            ))
+            results.append(
+                MemberForces(
+                    fx=data.FX,
+                    fy=data.FY,
+                    fz=data.FZ,
+                    mx=data.MX,
+                    my=data.MY,
+                    mz=data.MZ,
+                )
+            )
         return results
 
     # ------------------------------------------------------------------
@@ -193,9 +199,9 @@ class BarResultsQuery(_BaseEditor):
     # ------------------------------------------------------------------
 
     def get_deflections(
-        self, bar_number: int, case_number: int, pos: float = 0.5
+        self, bar_number: int, case_number: int, position: float = 0.5
     ) -> MemberDeflection:
-        """Return displacements and rotations at a single position along the bar.
+        """Return deflection at a single position along the bar.
 
         Parameters
         ----------
@@ -203,32 +209,32 @@ class BarResultsQuery(_BaseEditor):
             Robot bar number.
         case_number : int
             Load case or combination number.
-        pos : float, optional
+        position : float, optional
             Relative position along the bar, ``0.0`` (start) to ``1.0``
             (end). Defaults to ``0.5`` (midspan).
 
         Returns
         -------
         MemberDeflection
-            Displacements and rotations at the requested position.
+            Deflection at the requested position. Rotation fields are set to 0
+            as ``RobotBarDeflectionData`` does not expose them.
         """
         server = self._bar_result_server()
-        data = self._rbt.IRobotBarDisplacementData(
-            server.Displacements.Value(bar_number, case_number, pos)
-        )
+        data = server.Deflections.Value(bar_number, case_number, position)
+        # data = server.Deflections.Value(bar_number, position, case_number)
+        # print(data.PosUZ)
+
         return MemberDeflection(
             ux=data.UX,
             uy=data.UY,
             uz=data.UZ,
-            rx=data.RX,
-            ry=data.RY,
-            rz=data.RZ,
+            rx=0.0,
+            ry=0.0,
+            rz=0.0,
         )
 
-    def get_deflections_at_points(
-        self, bar_number: int, case_number: int, n_points: int = 5
-    ) -> list[MemberDeflection]:
-        """Return displacements and rotations at evenly-spaced points along the bar.
+    def get_max_deflection(self, bar_number: int, case_number: int) -> MemberDeflection:
+        """Return max deflection in the bar.
 
         Parameters
         ----------
@@ -236,30 +242,18 @@ class BarResultsQuery(_BaseEditor):
             Robot bar number.
         case_number : int
             Load case or combination number.
-        n_points : int, optional
-            Number of evenly-spaced evaluation points. Defaults to ``5``.
 
         Returns
         -------
-        list[MemberDeflection]
-            Displacements and rotations at each point, ordered from start
-            to end of the bar.
+        MemberDeflection
+            Maximum displacements (UX, UY, UZ). Rotation fields are set to 0
+            as ``RobotBarDeflectionData`` does not expose them.
         """
         server = self._bar_result_server()
-        results = []
-        for i in range(1, n_points + 1):
-            data = self._rbt.IRobotBarDisplacementData(
-                server.Displacements.ValueByNPoints(bar_number, case_number, n_points, i)
-            )
-            results.append(MemberDeflection(
-                ux=data.UX,
-                uy=data.UY,
-                uz=data.UZ,
-                rx=data.RX,
-                ry=data.RY,
-                rz=data.RZ,
-            ))
-        return results
+        data = server.Deflections.MaxValue(bar_number, case_number)
+        return MemberDeflection(
+            ux=data.UX, uy=data.UY, uz=data.UZ, rx=0.0, ry=0.0, rz=0.0
+        )
 
     # ------------------------------------------------------------------
     # Stresses
@@ -318,23 +312,27 @@ class BarResultsQuery(_BaseEditor):
         """
         server = self._bar_result_server()
         results = []
-        for i in range(1, n_points + 1):
+        for i in range(n_points):
+            pos = i / (n_points - 1) if n_points > 1 else 0.5
             data = self._rbt.IRobotBarStressData(
-                server.Stresses.ValueByNPoints(bar_number, case_number, n_points, i)
+                server.Stresses.Value(bar_number, case_number, pos)
             )
-            results.append(MemberStress(
-                smax=data.Smax,
-                smin=data.Smin,
-                shear_y=data.ShearY,
-                shear_z=data.ShearZ,
-                torsion=data.Torsion,
-            ))
+            results.append(
+                MemberStress(
+                    smax=data.Smax,
+                    smin=data.Smin,
+                    shear_y=data.ShearY,
+                    shear_z=data.ShearZ,
+                    torsion=data.Torsion,
+                )
+            )
         return results
 
 
 # ---------------------------------------------------------------------------
 # Shell (planar FE) result types
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class ShellForces:
@@ -440,13 +438,17 @@ class ShellResultsQuery(_BaseEditor):
     def _fe_result_server(self) -> Any:
         return self._rbt.IRobotFeResultServer(self._structure.Results.FiniteElems)
 
-    def _make_params(self, element_number: int, case_number: int, layer: Any) -> Any:
-        # IRobotFeResultParams is a COM coclass; instantiate via the module.
-        # If this raises AttributeError, try self._rbt.RobotFeResultParams().
-        params = self._rbt.IRobotFeResultParams()
+    def _make_params(
+        self,
+        element_number: int,
+        case_number: int,
+        layer: Any,
+    ) -> Any:
+        params = self._rbt.RobotFeResultParams()
         params.Case = case_number
         params.Element = element_number
         params.Layer = layer
+        # params.Node = node_number
         return params
 
     # ------------------------------------------------------------------
@@ -481,7 +483,9 @@ class ShellResultsQuery(_BaseEditor):
         if layer is None:
             layer = ShellLayer.MID
         params = self._make_params(element_number, case_number, layer)
-        data = self._rbt.IRobotFeResultDetailed(self._fe_result_server().Detailed(params))
+        data = self._rbt.IRobotFeResultDetailed(
+            self._fe_result_server().Detailed(params)
+        )
         return ShellForces(
             nxx=data.NXX,
             nyy=data.NYY,
@@ -535,7 +539,9 @@ class ShellResultsQuery(_BaseEditor):
         if layer is None:
             layer = ShellLayer.MID
         params = self._make_params(element_number, case_number, layer)
-        data = self._rbt.IRobotFeResultDetailed(self._fe_result_server().Detailed(params))
+        data = self._rbt.IRobotFeResultDetailed(
+            self._fe_result_server().Detailed(params)
+        )
         sxx, syy, sxy = data.SXX, data.SYY, data.SXY
         mises = math.sqrt(sxx**2 + syy**2 - sxx * syy + 3.0 * sxy**2)
         return ShellStresses(
