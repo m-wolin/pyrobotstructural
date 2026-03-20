@@ -39,5 +39,5 @@ def format_factors(case_factors) -> str:
     for i in range(1, case_factors.Count + 1):
         cf = case_factors.Get(i)
         factor_str = f"{cf.Factor:.4g}".rstrip("0").rstrip(".")
-        parts.append(f"{cf.CaseNumber}$\\times${factor_str}")
-    return " + ".join(parts)
+        parts.append(f"{cf.CaseNumber}\\cdot{factor_str}")
+    return "$" + " + ".join(parts) + "$"

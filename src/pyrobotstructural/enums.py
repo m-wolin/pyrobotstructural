@@ -131,7 +131,38 @@ class ThicknessType:
 
 class ShellLayer:
     """Layer through the shell thickness for FE result extraction."""
+
     _robot_enum_name = "IRobotFeLayerType"
-    TOP = com_member("I_FLT_UPPER")    # Top (upper) layer
-    MID = com_member("I_FLT_MIDDLE")   # Mid-plane layer
-    BOTTOM = com_member("I_FLT_LOWER") # Bottom (lower) layer
+    TOP = com_member("I_FLT_UPPER")  # Top (upper) layer
+    MID = com_member("I_FLT_MIDDLE")  # Mid-plane layer
+    BOTTOM = com_member("I_FLT_LOWER")  # Bottom (lower) layer
+
+
+class ObjLocalXDirType:
+    """Definition type for the local X axis direction of a panel/cladding object."""
+
+    _robot_enum_name = "IRobotObjLocalXDirDefinitionType"
+    UNDEFINED = com_member("I_OLXDDT_UNDEFINED")
+    CARTESIAN = com_member("I_OLXDDT_CARTESIAN")
+    POLAR = com_member("I_OLXDDT_POLAR")
+
+
+class NodeSupportFixingDir:
+    """Directions that can be blocked in a nodal support (used with one-directional supports)."""
+
+    _robot_enum_name = "IRobotNodeSupportFixingDirection"
+    UX = com_member("I_NSFD_UX")
+    UY = com_member("I_NSFD_UY")
+    UZ = com_member("I_NSFD_UZ")
+    RX = com_member("I_NSFD_RX")
+    RY = com_member("I_NSFD_RY")
+    RZ = com_member("I_NSFD_RZ")
+
+
+class NodeSupportOneDirType:
+    """Manner of unilateral (one-directional) blocking for a nodal support direction."""
+
+    _robot_enum_name = "IRobotNodeSupportOneDirectionFixingType"
+    NONE = com_member("I_NSODFT_NONE")
+    MINUS = com_member("I_NSODFT_MINUS")
+    PLUS = com_member("I_NSODFT_PLUS")

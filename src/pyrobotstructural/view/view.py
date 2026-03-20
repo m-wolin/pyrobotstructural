@@ -916,14 +916,89 @@ class ViewManager(_BaseEditor):
 
     def display_reinforcement_results(
         self,
-        Ax_neg,
-        Ax_pos,
-        Ay_neg,
-        Ay_pos,
-        deflection,
-        crack_x_neg,
-        crack_x_pos,
-        crack_y_neg,
-        crack_y_pos,
+        display: bool = True,
+        Ax_neg: bool = False,
+        Ax_pos: bool = False,
+        Ay_neg: bool = False,
+        Ay_pos: bool = False,
+        deflection: bool = False,
+        crack_x_neg: bool = False,
+        crack_x_pos: bool = False,
+        crack_y_neg: bool = False,
+        crack_y_pos: bool = False,
+        cases: str = "Simple Cases",
     ) -> None:
-        pass
+        """Display reinforcement results for shell/FE panels as a map.
+
+        Only one result type can be active at a time. When multiple flags are
+        ``True``, the first matching one in the order listed below is applied.
+        Reinforcement area results use ``IRobotViewFeMapResultType``; cracking
+        and deflection results use ``IRobotViewReinforcementResultType``.
+
+        Priority order: Ax_neg → Ax_pos → Ay_neg → Ay_pos → deflection →
+        crack_x_neg → crack_x_pos → crack_y_neg → crack_y_pos.
+
+        Parameters
+        ----------
+        display : bool, optional, default=True
+            If False, hides all FE map results regardless of other parameters.
+        Ax_neg : bool, optional, default=False
+            Display bottom (negative face) reinforcement area in the X direction
+            (``I_VFMRT_COMPLEX_REINFORCE_BOTTOM_MXX``).
+        Ax_pos : bool, optional, default=False
+            Display top (positive face) reinforcement area in the X direction
+            (``I_VFMRT_COMPLEX_REINFORCE_TOP_MXX``).
+        Ay_neg : bool, optional, default=False
+            Display bottom (negative face) reinforcement area in the Y direction
+            (``I_VFMRT_COMPLEX_REINFORCE_BOTTOM_MYY``).
+        Ay_pos : bool, optional, default=False
+            Display top (positive face) reinforcement area in the Y direction
+            (``I_VFMRT_COMPLEX_REINFORCE_TOP_MYY``).
+        deflection : bool, optional, default=False
+            Display deflection values (``I_VRRT_F``).
+        crack_x_neg : bool, optional, default=False
+            Display crack width on the bottom (negative) face in the X direction
+            (``I_VRRT_AX``).
+        crack_x_pos : bool, optional, default=False
+            Display crack width on the top (positive) face in the X direction
+            (``I_VRRT_AX``).
+        crack_y_neg : bool, optional, default=False
+            Display crack width on the bottom (negative) face in the Y direction
+            (``I_VRRT_AY``).
+        crack_y_pos : bool, optional, default=False
+            Display crack width on the top (positive) face in the Y direction
+            (``I_VRRT_AY``).
+        cases : str, optional, default='Simple Cases'
+            Cases to display. Accepts 'Simple Cases', 'Combinations', 'all',
+            or space-separated case numbers e.g. '1 2 3'.
+        """
+        view = self.get_current_view()
+        self._set_display_cases(view, cases)
+        VFMRT = self._rbt.IRobotViewFeMapResultType
+        VRRT = self._rbt.IRobotViewReinforcementResultType
+
+        if not display:
+            view.ParamsFeMap.CurrentResult = VFMRT(-1, True)
+            view.Redraw(0)
+            return
+
+        if Ax_neg:
+            view.ParamsFeMap.CurrentResult = VFMRT.I_VFMRT_COMPLEX_REINFORCE_BOTTOM_MXX
+        elif Ax_pos:
+            view.ParamsFeMap.CurrentResult = VFMRT.I_VFMRT_COMPLEX_REINFORCE_TOP_MXX
+        elif Ay_neg:
+            view.ParamsFeMap.CurrentResult = VFMRT.I_VFMRT_COMPLEX_REINFORCE_BOTTOM_MYY
+        elif Ay_pos:
+            view.ParamsFeMap.CurrentResult = VFMRT.I_VFMRT_COMPLEX_REINFORCE_TOP_MYY
+        elif deflection:
+            view.ParamsFeMap.CurrentResult = VRRT.I_VRRT_F
+        elif crack_x_neg:
+            view.ParamsFeMap.CurrentResult = VRRT.I_VRRT_AX
+        elif crack_x_pos:
+            view.ParamsFeMap.CurrentResult = VRRT.I_VRRT_AX
+        elif crack_y_neg:
+            view.ParamsFeMap.CurrentResult = VRRT.I_VRRT_AY
+        elif crack_y_pos:
+            view.ParamsFeMap.CurrentResult = VRRT.I_VRRT_AY
+
+        view.Redraw(0)

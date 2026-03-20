@@ -17,5 +17,6 @@ class ModelQuery(_BaseEditor):
             Path of current (active) model.
         """
         filename = self._raw.Project.FileName
-        dir = os.path.dirname(filename)
-        return dir
+        if not filename:
+            return os.getcwd()
+        return os.path.dirname(filename)

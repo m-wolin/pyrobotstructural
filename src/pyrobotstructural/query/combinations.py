@@ -22,7 +22,6 @@ class CombinationsQuery(_BaseEditor):
         ----------
         IRobotCaseSever or list[name:int, number:int, comb_type: str]
         """
-        # TODO: Refactor to use existing enum rather than additional dictionary
         all_cases = self._structure.Cases.GetAll()
         lcombs = []
         for i in range(1, all_cases.Count + 1):  # loop1
@@ -83,7 +82,7 @@ class CombinationsQuery(_BaseEditor):
         else:
             return self._rbt.IRobotCase(all_cases.Get(case_index))
 
-    def combinations_to_latex(
+    def to_latex(
         self,
         path: str,
         caption: str = "Load Combinations",
@@ -133,4 +132,7 @@ class CombinationsQuery(_BaseEditor):
             r"\end{table}",
         ]
 
-        Path(path).write_text("\n".join(lines), encoding="utf-8")
+        p = Path(path)
+        if p.is_dir():
+            p = p / "combinations.tex"
+        p.write_text("\n".join(lines), encoding="utf-8")

@@ -387,11 +387,60 @@ class LoadEditor(_BaseEditor):
                 record.SetPoint(corner_number, lpoint[0], lpoint[1], lpoint[2])
                 corner_number += 1
 
-    def add_planar_3p_load(self) -> None:
+    def add_planar_3p_load(
+        self,
+        case_name: str,
+        objects: int | str,
+        loads: list,
+        p1: list,
+        p2: list,
+        p3: list,
+        projected: int = 0,
+        coord_sys: int = 0,
+    ) -> None:
+        """Adds a planar 3-point (trapezoidal) load on panel/FE objects.
+
+        The load intensity is defined at three reference points, allowing a
+        linearly-varying distribution across the surface.
+
+        Parameters
+        ----------
+        case_name : str
+            Loadcase name to which the load will be assigned.
+        objects : int | str
+            Panel/FE object selection, e.g. ``"1 2 3"`` or a single int.
+        loads : list
+            Nine load components in order:
+            ``[Px1, Py1, Pz1, Px2, Py2, Pz2, Px3, Py3, Pz3]`` in Pa.
+        p1 : list
+            Coordinates ``[x, y, z]`` of reference point 1 (in metres).
+        p2 : list
+            Coordinates ``[x, y, z]`` of reference point 2 (in metres).
+        p3 : list
+            Coordinates ``[x, y, z]`` of reference point 3 (in metres).
+        projected : int, optional
+            ``0`` – not projected, ``1`` – projected. Defaults to ``0``.
+        coord_sys : int, optional
+            ``0`` – global, ``1`` – local. Defaults to ``0``.
         """
-        NOT YET IMPLEMENTED
-        """
-        pass
+        case = self._get_case_by_name(case_name)
+        record_index = case.Records.New(self._rbt.IRobotLoadRecordType(22))
+        record = case.Records.Get(record_index)
+        record.Objects.FromText(str(objects))
+        record.SetValue(0, loads[0])  # Px1
+        record.SetValue(1, loads[1])  # Py1
+        record.SetValue(2, loads[2])  # Pz1
+        record.SetValue(3, loads[3])  # Px2
+        record.SetValue(4, loads[4])  # Py2
+        record.SetValue(5, loads[5])  # Pz2
+        record.SetValue(6, loads[6])  # Px3
+        record.SetValue(7, loads[7])  # Py3
+        record.SetValue(8, loads[8])  # Pz3
+        record.SetPoint(1, p1[0], p1[1], p1[2])
+        record.SetPoint(2, p2[0], p2[1], p2[2])
+        record.SetPoint(3, p3[0], p3[1], p3[2])
+        record.SetValue(11, coord_sys)  # coord system
+        record.SetValue(12, projected)  # projected
 
     def _get_case_by_name(self, case_name: str) -> Any:
         """Private function to get simple loadcase by name.

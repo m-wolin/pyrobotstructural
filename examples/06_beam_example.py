@@ -103,4 +103,8 @@ app.view.view.display_member_forces(
     Fx=False, Fy=False, Fz=False, Mx=False, My=True, Mz=False, labels=True, scale=1
 )
 
+# --- Save screenshot ---
+model_path = app.query.model.get_model_path()
+app.view.screenshots.save_screenshot(name="Moments-My", dir_path=model_path)
+
 print("Done.")

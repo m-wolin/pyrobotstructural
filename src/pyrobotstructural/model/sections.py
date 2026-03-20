@@ -33,7 +33,7 @@ class SectionEditor(_BaseEditor):
         material: str
             Material name
         """
-        label = self.labels.Create(LabelType.BAR_SECTION, name)
+        label = self._labels.Create(LabelType.BAR_SECTION, name)
         data = self._rbt.IRobotBarSectionData(label.Data)
         data.Type = SectionType.TUBE
         data.ShapeType = SectionShapeType.TUBE
@@ -46,40 +46,55 @@ class SectionEditor(_BaseEditor):
         )  # I_BSDV_TF
         data.CalcNonstdGeometry()
         data.MaterialName = material
-        self.labels.Store(label)
+        self._labels.Store(label)
 
     def create_rect_section(
-        self, name: str, height: float, width: float, material: str
+        self,
+        name: str,
+        height: float,
+        width: float,
+        material: str,
+        thickness: float | None = None,
     ) -> None:
         """
-        Creates custom solid rectangle section.
+        Creates custom rectangle section, either solid or hollow (RHS).
 
         Parameters
         ----------
         name: str
             Name of the section.
         height: float
-            Height in meters
+            Height in millimeters
         width: float
-            Width in meters
+            Width in millimeters
         material: str
             Material name
-        TODO: Add option to create rectangle tube, so not filled
+        thickness: float | None
+            Wall thickness in millimeters. If None, a solid (filled) section is
+            created. If provided, a hollow rectangular hollow section (RHS) is
+            created with uniform wall thickness.
         """
-        label = self.labels.Create(LabelType.BAR_SECTION, name)
+        label = self._labels.Create(LabelType.BAR_SECTION, name)
         data = self._rbt.IRobotBarSectionData(label.Data)
         data.Type = SectionType.RECT
-        data.ShapeType = SectionShapeType.RECT_FILLED
         nonstd_data = data.CreateNonstd(0.0)
         nonstd_data.SetValue(
             self._rbt.IRobotBarSectionNonstdDataValue.I_BSNDV_RECT_B, width / 1000
-        )  # I_BSNDV_RECT_B
+        )
         nonstd_data.SetValue(
             self._rbt.IRobotBarSectionNonstdDataValue.I_BSNDV_RECT_H, height / 1000
-        )  # I_BSNDV_RECT_H
+        )
+        if thickness is None:
+            data.ShapeType = SectionShapeType.RECT_FILLED
+        else:
+            data.ShapeType = SectionShapeType.RECT
+            nonstd_data.SetValue(
+                self._rbt.IRobotBarSectionNonstdDataValue.I_BSNDV_RECT_T,
+                thickness / 1000,
+            )
         data.CalcNonstdGeometry()
         data.MaterialName = material
-        self.labels.Store(label)
+        self._labels.Store(label)
 
     def apply_section_to_bar(self, bar_number: int, section_name: str) -> None:
         """
@@ -93,7 +108,7 @@ class SectionEditor(_BaseEditor):
             Section name, assume it exists
 
         """
-        bar = self._rbt.IRobotBar(self.structure.Bars.Get(bar_number))
+        bar = self._rbt.IRobotBar(self._structure.Bars.Get(bar_number))
         bar.SetLabel(LabelType.BAR_SECTION, section_name)
 
     def load_from_database(self, database_name: str, section_name: str) -> None:

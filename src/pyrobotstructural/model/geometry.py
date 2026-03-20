@@ -1,9 +1,43 @@
 from __future__ import annotations
 from contextlib import contextmanager
-from typing import Any, Union
+from typing import Any, Generator, Optional, Union
 from .._base import _BaseEditor
-from ..enums import LabelType, ThicknessType
+from ..enums import LabelType, ObjLocalXDirType, ThicknessType
 import numpy as np
+
+
+def _set_local_x_dir(
+    attribs: Any,
+    dir_x: Union[tuple, list, np.ndarray],
+    rbt: Any,
+) -> None:
+    """Apply a Cartesian local-X direction vector to a panel's attribute object.
+
+    Parameters
+    ----------
+    attribs : IRobotObjAttributes
+        The COM attributes object returned by ``panel.Main.Attribs``.
+    dir_x : tuple | list | np.ndarray of shape (3,)
+        Direction vector in global Cartesian coordinates.  Normalised
+        internally before passing to the COM API.
+    rbt : module
+        The ``RobotOM`` module returned by ``get_robotom()``.
+
+    Raises
+    ------
+    ValueError
+        If ``dir_x`` does not have exactly 3 elements or is a zero vector.
+    """
+    vec = np.asarray(dir_x, dtype=float).ravel()
+    if vec.shape != (3,):
+        raise ValueError(
+            f"dir_x must be a 3-element vector, got shape {vec.shape}."
+        )
+    norm = float(np.linalg.norm(vec))
+    if norm < 1e-10:
+        raise ValueError("dir_x must not be a zero vector.")
+    vec = vec / norm
+    attribs.SetDirX(ObjLocalXDirType.CARTESIAN, float(vec[0]), float(vec[1]), float(vec[2]))
 
 
 class GeometryEditor(_BaseEditor):
@@ -14,7 +48,7 @@ class GeometryEditor(_BaseEditor):
         self._labels = self._structure.Labels
 
     @contextmanager
-    def begin_edit(self):
+    def begin_edit(self) -> Generator[None, Any, None]:
         """Context manager that batches all structure modifications into a
         single multi-operation flush, dramatically reducing COM overhead for
         large bulk operations.
@@ -80,7 +114,9 @@ class GeometryEditor(_BaseEditor):
             self._structure.BeginMultiOperation()
             try:
                 for row in data:
-                    nodes.Create(int(row[0]), float(row[1]), float(row[2]), float(row[3]))
+                    nodes.Create(
+                        int(row[0]), float(row[1]), float(row[2]), float(row[3])
+                    )
             finally:
                 self._structure.EndMultiOperation()
 
@@ -183,7 +219,9 @@ class GeometryEditor(_BaseEditor):
                     bar.SetLabel(LabelType.BAR_RELEASE, release_name)
                 if tension_comp is not None:
                     tc_value = 1 if tension_comp == "tension" else 2
-                    bar.TensionCompression = self._raw.IRbotBarTensionCompression(tc_value)
+                    bar.TensionCompression = self._raw.IRbotBarTensionCompression(
+                        tc_value
+                    )
                 if truss:
                     bar.TrussBar = True
         finally:
@@ -240,34 +278,87 @@ class GeometryEditor(_BaseEditor):
         points: list[list[float, float, float]],
         number: Any | int = None,
         load_distribution: str = "Two-way",
-        # method: str = "trapezoidal",
+        dir_x: Optional[Union[tuple, list, np.ndarray]] = None,
+        flip_z: bool = False,
     ) -> None:
-        """
-        Adds a cladding object to the model.
+        """Add a cladding object to the model.
 
         Parameters
         ----------
-        points: list[list[float, float, float]]
-            List of points, each point to be list of coordinates x, y, z
-        number: Any|int, optional
-            Number of the contour object, optional, if you specify number make sure it is free.
-        load_distribution: str, optional, default=two-way
-            Load distribution settings, it can be either: 'Two-way', 'One-way X', 'One-way Y'.
-        TODO: add option to provide local coordinate system
+        points : list[list[float, float, float]]
+            Contour vertices as a list of ``[index, x, y, z]`` rows.
+        number : int, optional
+            Object number to assign.  If omitted, the next free number is used.
+            The caller is responsible for ensuring the number is not already taken.
+        load_distribution : str, optional
+            Load distribution mode.  One of:
+
+            * ``"Two-way"`` — isotropic distribution (default)
+            * ``"One-way X"`` — load carried in local X direction only
+            * ``"One-way Y"`` — load carried in local Y direction only
+
+        dir_x : tuple | list | np.ndarray of shape (3,), optional
+            Cartesian direction vector ``(x, y, z)`` for the cladding's local X
+            axis, expressed in global coordinates.  The vector is normalised
+            internally, so its magnitude does not matter.
+
+            When omitted, Robot auto-computes the local X axis from the panel
+            geometry (usually along the first edge of the contour).
+
+            This setting is relevant for one-way cladding (``"One-way X"`` /
+            ``"One-way Y"``), where the local X axis determines the span
+            direction.
+
+        flip_z : bool, optional
+            If ``True``, reverses the panel's local Z axis (i.e. flips the
+            outward normal to the opposite face).  Defaults to ``False``.
+
+        Raises
+        ------
+        ValueError
+            If ``load_distribution`` is not one of the accepted strings.
+        ValueError
+            If ``dir_x`` is provided but is not a 3-element array or is a
+            zero vector.
+
+        Examples
+        --------
+        Isotropic cladding with Robot's default local axes:
+
+        >>> app.model.geometry.add_cladding(points, load_distribution="Two-way")
+
+        One-way cladding spanning in the global Y direction:
+
+        >>> app.model.geometry.add_cladding(
+        ...     points,
+        ...     load_distribution="One-way X",
+        ...     dir_x=(0.0, 1.0, 0.0),
+        ... )
+
+        Cladding with flipped normal (load applied from below):
+
+        >>> app.model.geometry.add_cladding(points, flip_z=True)
         """
-        load_distributions = [
-            "Two-way",
-            "One-way X",
-            "One-way Y",
-        ]  # This is hardcoded. I am not sure if Robot allows to create custom types
-        if load_distribution not in load_distributions:
-            print("Wrong load distribution parameter in add_cladding function")
-            raise ValueError
+        _VALID_DISTRIBUTIONS = {"Two-way", "One-way X", "One-way Y"}
+        if load_distribution not in _VALID_DISTRIBUTIONS:
+            raise ValueError(
+                f"Invalid load_distribution '{load_distribution}'. "
+                f"Must be one of: {sorted(_VALID_DISTRIBUTIONS)}"
+            )
+
         num = self.add_contour(points=points, number=number)
         obj_server = self._structure.Objects
         contour = self._rbt.IRobotObjObject(obj_server.Get(num))
-        contour.Main.Attribs.Meshed = False
+        attribs = contour.Main.Attribs
+        attribs.Meshed = False
         contour.SetLabel(LabelType.CLADDING, load_distribution)
+
+        if dir_x is not None:
+            _set_local_x_dir(attribs, dir_x, self._rbt)
+
+        if flip_z:
+            attribs.DirZ = True
+
         contour.Initialize()
         contour.Update()
 

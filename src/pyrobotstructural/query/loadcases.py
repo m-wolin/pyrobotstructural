@@ -42,7 +42,7 @@ class CasesQuery(_BaseEditor):
         else:
             return self._rbt.IRobotCase(all_cases.Get(case_index))
 
-    def loadcases_to_latex(
+    def to_latex(
         self,
         path: str,
         caption: str = "Load Cases",
@@ -86,4 +86,7 @@ class CasesQuery(_BaseEditor):
             r"\end{table}",
         ]
 
-        Path(path).write_text("\n".join(lines), encoding="utf-8")
+        p = Path(path)
+        if p.is_dir():
+            p = p / "loadcases.tex"
+        p.write_text("\n".join(lines), encoding="utf-8")
