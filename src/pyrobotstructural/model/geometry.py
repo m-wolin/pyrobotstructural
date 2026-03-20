@@ -86,18 +86,19 @@ class GeometryEditor(_BaseEditor):
 
         Examples
         --------
-        # Single node
-        model.add_node(1, 0.0, 1.0, 2.0)
+        Single node:
 
-        # List of nodes
-        model.add_node([[1, 0.0, 1.0, 2.0],
-                        [2, 3.0, 4.0, 5.0]])
+        >>> model.add_node(1, 0.0, 1.0, 2.0)
 
-        # Numpy array
-        nodes = np.array([[1, 0.0, 1.0, 2.0],
-                        [2, 3.0, 4.0, 5.0]])
+        Multiple nodes as a 2-D list:
 
-        model.add_node(nodes)
+        >>> model.add_node([[1, 0.0, 1.0, 2.0], [2, 3.0, 4.0, 5.0]])
+
+        NumPy array:
+
+        >>> import numpy as np
+        >>> nodes = np.array([[1, 0.0, 1.0, 2.0], [2, 3.0, 4.0, 5.0]])
+        >>> model.add_node(nodes)
         """
         nodes = self._structure.Nodes
 
@@ -170,16 +171,18 @@ class GeometryEditor(_BaseEditor):
 
         Examples
         --------
-        # Single member
-        model.add_member(1, 1, 2, section_name="HEA200")
+        Single member:
 
-        # Multiple members — list or numpy array
-        model.add_member([[1, 1, 2],
-                        [2, 2, 3],
-                        [3, 3, 4]], section_name="HEA200")
+        >>> model.add_member(1, 1, 2, section_name="HEA200")
 
-        model.add_member(np.array([[1, 1, 2],
-                                [2, 2, 3]]), truss=True)
+        Multiple members as a list:
+
+        >>> model.add_member([[1, 1, 2], [2, 2, 3], [3, 3, 4]], section_name="HEA200")
+
+        Multiple truss members as a NumPy array:
+
+        >>> import numpy as np
+        >>> model.add_member(np.array([[1, 1, 2], [2, 2, 3]]), truss=True)
         """
         # --- normalise input into a list of (number, start, end) tuples ---
         if isinstance(number_or_data, (int, np.integer)):

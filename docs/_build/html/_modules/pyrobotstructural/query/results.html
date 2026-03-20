@@ -1,0 +1,877 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>pyrobotstructural.query.results - pyrobotstructural</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">pyrobotstructural</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <span class="sidebar-brand-text">pyrobotstructural</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/application.html">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loads.html">Loads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/query.html">Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/view.html">View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/enums.html">Enums</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for pyrobotstructural.query.results</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._base</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseEditor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..enums</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShellLayer</span>
+
+
+<div class="viewcode-block" id="MemberForces">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.MemberForces">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MemberForces</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal forces at a single point on a bar member.</span>
+
+<span class="sd">    All values are returned in Robot&#39;s internal SI units.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fx : float</span>
+<span class="sd">        Axial force [N].</span>
+<span class="sd">    fy : float</span>
+<span class="sd">        Shear force in the local Y direction [N].</span>
+<span class="sd">    fz : float</span>
+<span class="sd">        Shear force in the local Z direction [N].</span>
+<span class="sd">    mx : float</span>
+<span class="sd">        Torsional moment about the local X axis [Nm].</span>
+<span class="sd">    my : float</span>
+<span class="sd">        Bending moment about the local Y axis [Nm].</span>
+<span class="sd">    mz : float</span>
+<span class="sd">        Bending moment about the local Z axis [Nm].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">fz</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">mx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">my</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">mz</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="MemberDeflection">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.MemberDeflection">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MemberDeflection</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Displacements and rotations at a single point on a bar member.</span>
+
+<span class="sd">    All values are returned in Robot&#39;s internal SI units.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ux : float</span>
+<span class="sd">        Displacement in the global X direction [m].</span>
+<span class="sd">    uy : float</span>
+<span class="sd">        Displacement in the global Y direction [m].</span>
+<span class="sd">    uz : float</span>
+<span class="sd">        Displacement in the global Z direction [m].</span>
+<span class="sd">    rx : float</span>
+<span class="sd">        Rotation about the global X axis [rad].</span>
+<span class="sd">    ry : float</span>
+<span class="sd">        Rotation about the global Y axis [rad].</span>
+<span class="sd">    rz : float</span>
+<span class="sd">        Rotation about the global Z axis [rad].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ux</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">uy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">uz</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">rx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">ry</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">rz</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="MemberStress">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.MemberStress">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MemberStress</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross-section stresses at a single point on a bar member.</span>
+
+<span class="sd">    All values are returned in Robot&#39;s internal SI units.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smax : float</span>
+<span class="sd">        Maximum normal stress (tension positive) [Pa].</span>
+<span class="sd">    smin : float</span>
+<span class="sd">        Minimum normal stress (compression negative) [Pa].</span>
+<span class="sd">    shear_y : float</span>
+<span class="sd">        Shear stress in the local Y direction [Pa].</span>
+<span class="sd">    shear_z : float</span>
+<span class="sd">        Shear stress in the local Z direction [Pa].</span>
+<span class="sd">    torsion : float</span>
+<span class="sd">        Torsional shear stress [Pa].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">smax</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">smin</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">shear_y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">shear_z</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">torsion</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="BarResultsQuery">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.BarResultsQuery">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BarResultsQuery</span><span class="p">(</span><span class="n">_BaseEditor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read-only access to bar member analysis results.</span>
+
+<span class="sd">    Wraps ``IRobotBarResultServer`` (``Project.Structure.Results.Bars``) and</span>
+<span class="sd">    exposes internal forces, displacements, and stresses for individual bars</span>
+<span class="sd">    and load cases.</span>
+
+<span class="sd">    Access path: ``app.query.results``</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw_app : Any</span>
+<span class="sd">        The raw ``RobotApplication`` COM object passed down from</span>
+<span class="sd">        ``RobotApp``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_app</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">raw_app</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw</span><span class="o">.</span><span class="n">Project</span><span class="o">.</span><span class="n">Structure</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_bar_result_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotBarResultServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="o">.</span><span class="n">Results</span><span class="o">.</span><span class="n">Bars</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Forces</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="BarResultsQuery.get_forces">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.BarResultsQuery.get_forces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_forces</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bar_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MemberForces</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return internal forces at a single position along the bar.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bar_number : int</span>
+<span class="sd">            Robot bar number.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+<span class="sd">        position : float, optional</span>
+<span class="sd">            Relative position along the bar, ``0.0`` (start) to ``1.0``</span>
+<span class="sd">            (end). Defaults to ``0.5`` (midspan).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MemberForces</span>
+<span class="sd">            Internal forces at the requested position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bar_result_server</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotBarForceData</span><span class="p">(</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">Forces</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">bar_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">MemberForces</span><span class="p">(</span>
+            <span class="n">fx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">FX</span><span class="p">,</span>
+            <span class="n">fy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">FY</span><span class="p">,</span>
+            <span class="n">fz</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">FZ</span><span class="p">,</span>
+            <span class="n">mx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MX</span><span class="p">,</span>
+            <span class="n">my</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MY</span><span class="p">,</span>
+            <span class="n">mz</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MZ</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BarResultsQuery.get_forces_at_points">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.BarResultsQuery.get_forces_at_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_forces_at_points</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bar_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MemberForces</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return internal forces at evenly-spaced points along the bar.</span>
+
+<span class="sd">        Points are numbered 1 to ``n_points`` by Robot&#39;s</span>
+<span class="sd">        ``ValueByNPoints`` method, which spaces them uniformly from the</span>
+<span class="sd">        start node to the end node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bar_number : int</span>
+<span class="sd">            Robot bar number.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+<span class="sd">        n_points : int, optional</span>
+<span class="sd">            Number of evenly-spaced evaluation points. Defaults to ``5``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[MemberForces]</span>
+<span class="sd">            Forces at each point, ordered from start to end of the bar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bar_result_server</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotBarForceData</span><span class="p">(</span>
+                <span class="n">server</span><span class="o">.</span><span class="n">Forces</span><span class="o">.</span><span class="n">ValueByNPoints</span><span class="p">(</span><span class="n">bar_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">MemberForces</span><span class="p">(</span>
+                    <span class="n">fx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">FX</span><span class="p">,</span>
+                    <span class="n">fy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">FY</span><span class="p">,</span>
+                    <span class="n">fz</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">FZ</span><span class="p">,</span>
+                    <span class="n">mx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MX</span><span class="p">,</span>
+                    <span class="n">my</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MY</span><span class="p">,</span>
+                    <span class="n">mz</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MZ</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Deflections / Displacements</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="BarResultsQuery.get_deflections">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.BarResultsQuery.get_deflections">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_deflections</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bar_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MemberDeflection</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return deflection at a single position along the bar.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bar_number : int</span>
+<span class="sd">            Robot bar number.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+<span class="sd">        position : float, optional</span>
+<span class="sd">            Relative position along the bar, ``0.0`` (start) to ``1.0``</span>
+<span class="sd">            (end). Defaults to ``0.5`` (midspan).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MemberDeflection</span>
+<span class="sd">            Deflection at the requested position. Rotation fields are set to 0</span>
+<span class="sd">            as ``RobotBarDeflectionData`` does not expose them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bar_result_server</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">Deflections</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">bar_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="c1"># data = server.Deflections.Value(bar_number, position, case_number)</span>
+        <span class="c1"># print(data.PosUZ)</span>
+
+        <span class="k">return</span> <span class="n">MemberDeflection</span><span class="p">(</span>
+            <span class="n">ux</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UX</span><span class="p">,</span>
+            <span class="n">uy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UY</span><span class="p">,</span>
+            <span class="n">uz</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UZ</span><span class="p">,</span>
+            <span class="n">rx</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">ry</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">rz</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BarResultsQuery.get_max_deflection">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.BarResultsQuery.get_max_deflection">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_max_deflection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bar_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MemberDeflection</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return max deflection in the bar.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bar_number : int</span>
+<span class="sd">            Robot bar number.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MemberDeflection</span>
+<span class="sd">            Maximum displacements (UX, UY, UZ). Rotation fields are set to 0</span>
+<span class="sd">            as ``RobotBarDeflectionData`` does not expose them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bar_result_server</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">Deflections</span><span class="o">.</span><span class="n">MaxValue</span><span class="p">(</span><span class="n">bar_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">MemberDeflection</span><span class="p">(</span>
+            <span class="n">ux</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UX</span><span class="p">,</span> <span class="n">uy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UY</span><span class="p">,</span> <span class="n">uz</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">UZ</span><span class="p">,</span> <span class="n">rx</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ry</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rz</span><span class="o">=</span><span class="mf">0.0</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Stresses</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="BarResultsQuery.get_stresses">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.BarResultsQuery.get_stresses">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stresses</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bar_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MemberStress</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return cross-section stresses at a single position along the bar.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bar_number : int</span>
+<span class="sd">            Robot bar number.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+<span class="sd">        pos : float, optional</span>
+<span class="sd">            Relative position along the bar, ``0.0`` (start) to ``1.0``</span>
+<span class="sd">            (end). Defaults to ``0.5`` (midspan).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MemberStress</span>
+<span class="sd">            Cross-section stresses at the requested position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bar_result_server</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotBarStressData</span><span class="p">(</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">Stresses</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">bar_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">MemberStress</span><span class="p">(</span>
+            <span class="n">smax</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Smax</span><span class="p">,</span>
+            <span class="n">smin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Smin</span><span class="p">,</span>
+            <span class="n">shear_y</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ShearY</span><span class="p">,</span>
+            <span class="n">shear_z</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ShearZ</span><span class="p">,</span>
+            <span class="n">torsion</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Torsion</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BarResultsQuery.get_stresses_at_points">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.BarResultsQuery.get_stresses_at_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stresses_at_points</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bar_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">MemberStress</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return cross-section stresses at evenly-spaced points along the bar.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bar_number : int</span>
+<span class="sd">            Robot bar number.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+<span class="sd">        n_points : int, optional</span>
+<span class="sd">            Number of evenly-spaced evaluation points. Defaults to ``5``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[MemberStress]</span>
+<span class="sd">            Stresses at each point, ordered from start to end of the bar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bar_result_server</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_points</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_points</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">n_points</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">0.5</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotBarStressData</span><span class="p">(</span>
+                <span class="n">server</span><span class="o">.</span><span class="n">Stresses</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">bar_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">MemberStress</span><span class="p">(</span>
+                    <span class="n">smax</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Smax</span><span class="p">,</span>
+                    <span class="n">smin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Smin</span><span class="p">,</span>
+                    <span class="n">shear_y</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ShearY</span><span class="p">,</span>
+                    <span class="n">shear_z</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ShearZ</span><span class="p">,</span>
+                    <span class="n">torsion</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Torsion</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Shell (planar FE) result types</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="ShellForces">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.ShellForces">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ShellForces</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;In-plane forces and moments per unit width for a shell finite element.</span>
+
+<span class="sd">    Values correspond to the fields of ``IRobotFeResultDetailed`` and are</span>
+<span class="sd">    expressed per unit width of the shell mid-plane.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nxx : float</span>
+<span class="sd">        Membrane (normal) force in the local X direction [N/m].</span>
+<span class="sd">    nyy : float</span>
+<span class="sd">        Membrane (normal) force in the local Y direction [N/m].</span>
+<span class="sd">    nxy : float</span>
+<span class="sd">        Membrane shear force [N/m].</span>
+<span class="sd">    mxx : float</span>
+<span class="sd">        Bending moment about the local Y axis per unit width [Nm/m].</span>
+<span class="sd">    myy : float</span>
+<span class="sd">        Bending moment about the local X axis per unit width [Nm/m].</span>
+<span class="sd">    mxy : float</span>
+<span class="sd">        Torsional (twisting) moment per unit width [Nm/m].</span>
+<span class="sd">    qxx : float</span>
+<span class="sd">        Transverse shear force in the local X direction [N/m].</span>
+<span class="sd">    qyy : float</span>
+<span class="sd">        Transverse shear force in the local Y direction [N/m].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nxx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">nyy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">nxy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">mxx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">myy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">mxy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">qxx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">qyy</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="ShellStresses">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.ShellStresses">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ShellStresses</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;In-plane and transverse stresses for a shell finite element.</span>
+
+<span class="sd">    Values correspond to the fields of ``IRobotFeResultDetailed``.</span>
+<span class="sd">    Von Mises stress is computed from the Cauchy in-plane components.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sxx : float</span>
+<span class="sd">        Normal stress in the local X direction, σxx [Pa].</span>
+<span class="sd">    syy : float</span>
+<span class="sd">        Normal stress in the local Y direction, σyy [Pa].</span>
+<span class="sd">    sxy : float</span>
+<span class="sd">        In-plane shear stress, τxy [Pa].</span>
+<span class="sd">    txx : float</span>
+<span class="sd">        Transverse shear stress in the local X direction [Pa].</span>
+<span class="sd">    tyy : float</span>
+<span class="sd">        Transverse shear stress in the local Y direction [Pa].</span>
+<span class="sd">    mises : float</span>
+<span class="sd">        Von Mises equivalent stress [Pa], computed as</span>
+<span class="sd">        ``sqrt(σxx² + σyy² − σxx·σyy + 3·τxy²)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sxx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">syy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">sxy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">txx</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">tyy</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">mises</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="ShellResultsQuery">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.ShellResultsQuery">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ShellResultsQuery</span><span class="p">(</span><span class="n">_BaseEditor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read-only access to planar shell finite element analysis results.</span>
+
+<span class="sd">    Wraps ``IRobotFeResultServer``</span>
+<span class="sd">    (``Project.Structure.Results.FiniteElems``) and exposes in-plane</span>
+<span class="sd">    forces and stresses for individual FE elements, load cases, and</span>
+<span class="sd">    through-thickness layers.</span>
+
+<span class="sd">    Access path: ``app.query.shell_results``</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw_app : Any</span>
+<span class="sd">        The raw ``RobotApplication`` COM object passed down from</span>
+<span class="sd">        ``RobotApp``.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Results are retrieved via ``IRobotFeResultDetailed``, which requires</span>
+<span class="sd">    an ``IRobotFeResultParams`` object specifying the element number, load</span>
+<span class="sd">    case, and through-thickness layer. Use :class:`~pyrobotstructural.enums.ShellLayer`</span>
+<span class="sd">    constants to select the layer:</span>
+
+<span class="sd">    - ``ShellLayer.TOP`` — upper (top) surface</span>
+<span class="sd">    - ``ShellLayer.MID`` — mid-plane (default)</span>
+<span class="sd">    - ``ShellLayer.BOTTOM`` — lower (bottom) surface</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_app</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">raw_app</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw</span><span class="o">.</span><span class="n">Project</span><span class="o">.</span><span class="n">Structure</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fe_result_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotFeResultServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="o">.</span><span class="n">Results</span><span class="o">.</span><span class="n">FiniteElems</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_params</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">layer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">RobotFeResultParams</span><span class="p">()</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">Case</span> <span class="o">=</span> <span class="n">case_number</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">Element</span> <span class="o">=</span> <span class="n">element_number</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">Layer</span> <span class="o">=</span> <span class="n">layer</span>
+        <span class="c1"># params.Node = node_number</span>
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Forces</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="ShellResultsQuery.get_forces">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.ShellResultsQuery.get_forces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_forces</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">layer</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShellForces</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return in-plane forces and moments for a single FE element.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_number : int</span>
+<span class="sd">            Finite element number in Robot.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+<span class="sd">        layer : ShellLayer or None, optional</span>
+<span class="sd">            Through-thickness layer at which results are evaluated.</span>
+<span class="sd">            Accepts ``ShellLayer.TOP``, ``ShellLayer.MID``, or</span>
+<span class="sd">            ``ShellLayer.BOTTOM``. Defaults to ``ShellLayer.MID``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ShellForces</span>
+<span class="sd">            In-plane forces and moments per unit width at the requested</span>
+<span class="sd">            layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">layer</span> <span class="o">=</span> <span class="n">ShellLayer</span><span class="o">.</span><span class="n">MID</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_params</span><span class="p">(</span><span class="n">element_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotFeResultDetailed</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fe_result_server</span><span class="p">()</span><span class="o">.</span><span class="n">Detailed</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ShellForces</span><span class="p">(</span>
+            <span class="n">nxx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">NXX</span><span class="p">,</span>
+            <span class="n">nyy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">NYY</span><span class="p">,</span>
+            <span class="n">nxy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">NXY</span><span class="p">,</span>
+            <span class="n">mxx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MXX</span><span class="p">,</span>
+            <span class="n">myy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MYY</span><span class="p">,</span>
+            <span class="n">mxy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">MXY</span><span class="p">,</span>
+            <span class="n">qxx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">QXX</span><span class="p">,</span>
+            <span class="n">qyy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">QYY</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Stresses</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="ShellResultsQuery.get_stresses">
+<a class="viewcode-back" href="../../../api/query.html#pyrobotstructural.query.results.ShellResultsQuery.get_stresses">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stresses</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">case_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">layer</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShellStresses</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return in-plane stresses (including von Mises) for a single FE element.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_number : int</span>
+<span class="sd">            Finite element number in Robot.</span>
+<span class="sd">        case_number : int</span>
+<span class="sd">            Load case or combination number.</span>
+<span class="sd">        layer : ShellLayer or None, optional</span>
+<span class="sd">            Through-thickness layer at which results are evaluated.</span>
+<span class="sd">            Accepts ``ShellLayer.TOP``, ``ShellLayer.MID``, or</span>
+<span class="sd">            ``ShellLayer.BOTTOM``. Defaults to ``ShellLayer.MID``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ShellStresses</span>
+<span class="sd">            In-plane and transverse stresses at the requested layer,</span>
+<span class="sd">            including the computed von Mises stress.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Von Mises stress is derived from the Cauchy in-plane stress</span>
+<span class="sd">        components using the plane-stress formula:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \\sigma_{vm} = \\sqrt{\\sigma_{xx}^2 + \\sigma_{yy}^2</span>
+<span class="sd">                          - \\sigma_{xx}\\,\\sigma_{yy} + 3\\,\\tau_{xy}^2}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">layer</span> <span class="o">=</span> <span class="n">ShellLayer</span><span class="o">.</span><span class="n">MID</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_params</span><span class="p">(</span><span class="n">element_number</span><span class="p">,</span> <span class="n">case_number</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rbt</span><span class="o">.</span><span class="n">IRobotFeResultDetailed</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fe_result_server</span><span class="p">()</span><span class="o">.</span><span class="n">Detailed</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">sxx</span><span class="p">,</span> <span class="n">syy</span><span class="p">,</span> <span class="n">sxy</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">SXX</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">SYY</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">SXY</span>
+        <span class="n">mises</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sxx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">syy</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">sxx</span> <span class="o">*</span> <span class="n">syy</span> <span class="o">+</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">sxy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ShellStresses</span><span class="p">(</span>
+            <span class="n">sxx</span><span class="o">=</span><span class="n">sxx</span><span class="p">,</span>
+            <span class="n">syy</span><span class="o">=</span><span class="n">syy</span><span class="p">,</span>
+            <span class="n">sxy</span><span class="o">=</span><span class="n">sxy</span><span class="p">,</span>
+            <span class="n">txx</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">TXX</span><span class="p">,</span>
+            <span class="n">tyy</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">TYY</span><span class="p">,</span>
+            <span class="n">mises</span><span class="o">=</span><span class="n">mises</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, m-wolin
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

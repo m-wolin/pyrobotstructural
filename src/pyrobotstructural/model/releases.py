@@ -103,10 +103,9 @@ class ReleaseEditor(_BaseEditor):
         kz: float = None,
         hx: float = None,
     ) -> None:
-        """
-        Creates new linear release.
+        """Create a new linear release.
 
-         Parameters
+        Parameters
         ----------
         name: str,
             Name of the release

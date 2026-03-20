@@ -1,14 +1,35 @@
 [project]
 name = "pyrobotstructural"
 version = "0.1.0"
-description = "Add your description here"
+description = "Unofficial Python wrapper for Autodesk Robot Structural Analysis Professional"
 readme = "README.md"
 requires-python = ">=3.14"
+license = {text = "MIT"}
+authors = [
+    {name = "m-wolin"},
+]
+keywords = ["autodesk", "robot", "structural", "analysis", "FEM", "BIM", "robotom"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "numpy>=2.4.2",
     "pillow>=12.1.1",
     "pythonnet>=3.1.0rc0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/m-wolin/pyrobotstructural"
+Repository = "https://github.com/m-wolin/pyrobotstructural"
+Issues = "https://github.com/m-wolin/pyrobotstructural/issues"
+Documentation = "https://pyrobotstructural.readthedocs.io"
 
 [build-system]
 requires = ["hatchling"]
@@ -22,4 +43,10 @@ dev = [
     "mypy>=1.19.1",
     "pytest>=9.0.2",
     "ruff>=0.15.4",
+]
+docs = [
+    "sphinx>=8.0",
+    "myst-parser>=4.0",
+    "furo>=2024.8.6",
+    "sphinx-autodoc-typehints>=2.0",
 ]

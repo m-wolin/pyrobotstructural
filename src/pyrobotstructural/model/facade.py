@@ -7,6 +7,12 @@ from .management import ModelManager
 
 
 class ModelFacade:
+    """Facade for building and editing the structural model.
+
+    Accessed via ``app.model``.  Aggregates the geometry, section, support,
+    and management sub-editors.
+    """
+
     def __init__(self, raw_app: Any) -> None:
         self._raw = raw_app
         self.geometry = GeometryEditor(self._raw)

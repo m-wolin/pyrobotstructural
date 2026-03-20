@@ -5,6 +5,12 @@ from .load import LoadEditor
 
 
 class LoadsFacade:
+    """Facade for managing load cases, combinations, and applied loads.
+
+    Accessed via ``app.loads``.  Aggregates the load case, combination,
+    and load application sub-editors.
+    """
+
     def __init__(self, raw_app: Any) -> None:
         self._raw = raw_app
         self.load = LoadEditor(self._raw)

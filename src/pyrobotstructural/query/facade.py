@@ -9,6 +9,12 @@ from .results import BarResultsQuery, ShellResultsQuery
 
 
 class QueryFacade:
+    """Read-only facade for querying the model and analysis results.
+
+    Accessed via ``app.query``.  Aggregates query classes for nodes, bars,
+    load cases, combinations, model metadata, bar results, and shell results.
+    """
+
     def __init__(self, raw_app: Any) -> None:
         self._raw = raw_app
         self.nodes = NodesQuery(self._raw)
