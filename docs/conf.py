@@ -24,7 +24,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # Mock Windows-only imports so the docs build succeeds on Linux (ReadTheDocs).
 # `clr` is provided by pythonnet and is only usable on Windows with Robot installed.
-autodoc_mock_imports = ["clr"]
+autodoc_mock_imports = ["clr", "win32clipboard", "win32con", "win32api", "win32gui"]
 
 # -- Napoleon (NumPy-style docstrings) ----------------------------------------
 napoleon_numpy_docstring = True

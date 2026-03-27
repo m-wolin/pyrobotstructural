@@ -287,6 +287,11 @@ app.model.supports.apply_node_support([1, 2], “Pinned”)</p>
 <dt class="sig sig-object py" id="pyrobotstructural.model.geometry.GeometryEditor">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyrobotstructural.model.geometry.</span></span><span class="sig-name descname"><span class="pre">GeometryEditor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyrobotstructural/model/geometry.html#GeometryEditor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrobotstructural.model.geometry.GeometryEditor" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEditor</span></code></p>
+<p>Editor for structural geometry: nodes, bars, shells, and cladding.</p>
+<p>Accessed via <code class="docutils literal notranslate"><span class="pre">app.model.geometry</span></code>.  Provides methods to add nodes,
+bar members, shell panels, and cladding surfaces to the Robot model.
+Use <a class="reference internal" href="#pyrobotstructural.model.geometry.GeometryEditor.begin_edit" title="pyrobotstructural.model.geometry.GeometryEditor.begin_edit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">begin_edit()</span></code></a> to batch bulk operations into a single COM
+multi-operation flush for large performance gains.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>raw_app</strong> (<em>Any</em>)</p>
@@ -322,9 +327,9 @@ app.model.geometry.add_member([[1, 1, 2]], section_name=”IPE 100”)</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>number_or_data</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – <ul>
 <li><p>Single node: pass number (int) alongside x, y, z.</p></li>
-<li><p>Multiple nodes: pass a 2D list or numpy array of shape (N, 4)</p></li>
+<li><p>Multiple nodes: pass a 2D list or numpy array of shape (N, 4)
+where each row is [number, x, y, z].</p></li>
 </ul>
-<p>where each row is [number, x, y, z].</p>
 </p></li>
 <li><p><strong>x</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Coordinates in meters. Only used when adding a single node.</p></li>
 <li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Coordinates in meters. Only used when adding a single node.</p></li>
@@ -361,9 +366,9 @@ app.model.geometry.add_member([[1, 1, 2]], section_name=”IPE 100”)</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>number_or_data</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – <ul>
 <li><p>Single bar: pass bar number (int) alongside start_node and end_node.</p></li>
-<li><p>Multiple bars: pass a 2-D list or numpy array of shape (N, 3)</p></li>
+<li><p>Multiple bars: pass a 2-D list or numpy array of shape (N, 3)
+where each row is [member_number, start_node, end_node].</p></li>
 </ul>
-<p>where each row is [member_number, start_node, end_node].</p>
 </p></li>
 <li><p><strong>start_node</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Start node number. Only used when adding a single bar.</p></li>
 <li><p><strong>end_node</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – End node number. Only used when adding a single bar.</p></li>

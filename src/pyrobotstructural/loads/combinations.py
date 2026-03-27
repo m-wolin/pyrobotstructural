@@ -4,6 +4,11 @@ from ..enums import CaseNature, CaseAnalizeType, CombinationType
 
 
 class CombinationManager(_BaseEditor):
+    """Manager for creating ULS and SLS load combinations.
+
+    Accessed via ``app.loads.combinations``.
+    """
+
     def __init__(self, raw_app: Any) -> None:
         super().__init__(raw_app)
         self._structure = self._raw.Project.Structure

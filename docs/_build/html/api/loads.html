@@ -270,6 +270,8 @@ and load application sub-editors.</p>
 <dt class="sig sig-object py" id="pyrobotstructural.loads.cases.LoadCaseManager">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyrobotstructural.loads.cases.</span></span><span class="sig-name descname"><span class="pre">LoadCaseManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyrobotstructural/loads/cases.html#LoadCaseManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrobotstructural.loads.cases.LoadCaseManager" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEditor</span></code></p>
+<p>Manager for creating and listing load cases.</p>
+<p>Accessed via <code class="docutils literal notranslate"><span class="pre">app.loads.cases</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>raw_app</strong> (<em>Any</em>)</p>
@@ -318,6 +320,8 @@ and load application sub-editors.</p>
 <dt class="sig sig-object py" id="pyrobotstructural.loads.combinations.CombinationManager">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyrobotstructural.loads.combinations.</span></span><span class="sig-name descname"><span class="pre">CombinationManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyrobotstructural/loads/combinations.html#CombinationManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrobotstructural.loads.combinations.CombinationManager" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEditor</span></code></p>
+<p>Manager for creating ULS and SLS load combinations.</p>
+<p>Accessed via <code class="docutils literal notranslate"><span class="pre">app.loads.combinations</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>raw_app</strong> (<em>Any</em>)</p>
@@ -370,6 +374,10 @@ and load application sub-editors.</p>
 <dt class="sig sig-object py" id="pyrobotstructural.loads.load.LoadEditor">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyrobotstructural.loads.load.</span></span><span class="sig-name descname"><span class="pre">LoadEditor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyrobotstructural/loads/load.html#LoadEditor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrobotstructural.loads.load.LoadEditor" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEditor</span></code></p>
+<p>Editor for applying loads to members, nodes, and panels.</p>
+<p>Accessed via <code class="docutils literal notranslate"><span class="pre">app.loads.load</span></code>.  Supports self-weight, nodal forces,
+uniform and trapezoidal bar loads, point loads along bars, and panel
+(surface) loads.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>raw_app</strong> (<em>Any</em>)</p>

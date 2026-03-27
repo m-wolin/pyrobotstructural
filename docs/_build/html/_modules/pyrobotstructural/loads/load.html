@@ -249,6 +249,13 @@
 <div class="viewcode-block" id="LoadEditor">
 <a class="viewcode-back" href="../../../api/loads.html#pyrobotstructural.loads.load.LoadEditor">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LoadEditor</span><span class="p">(</span><span class="n">_BaseEditor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Editor for applying loads to members, nodes, and panels.</span>
+
+<span class="sd">    Accessed via ``app.loads.load``.  Supports self-weight, nodal forces,</span>
+<span class="sd">    uniform and trapezoidal bar loads, point loads along bars, and panel</span>
+<span class="sd">    (surface) loads.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_app</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">raw_app</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw</span><span class="o">.</span><span class="n">Project</span><span class="o">.</span><span class="n">Structure</span>

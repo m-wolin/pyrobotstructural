@@ -41,6 +41,14 @@ def _set_local_x_dir(
 
 
 class GeometryEditor(_BaseEditor):
+    """Editor for structural geometry: nodes, bars, shells, and cladding.
+
+    Accessed via ``app.model.geometry``.  Provides methods to add nodes,
+    bar members, shell panels, and cladding surfaces to the Robot model.
+    Use :meth:`begin_edit` to batch bulk operations into a single COM
+    multi-operation flush for large performance gains.
+    """
+
     def __init__(self, raw_app: Any) -> None:
         super().__init__(raw_app)
         self._project = self._raw.Project
@@ -80,7 +88,7 @@ class GeometryEditor(_BaseEditor):
         number_or_data : int | list | np.ndarray
             - Single node: pass number (int) alongside x, y, z.
             - Multiple nodes: pass a 2D list or numpy array of shape (N, 4)
-            where each row is [number, x, y, z].
+              where each row is [number, x, y, z].
         x, y, z : float, optional
             Coordinates in meters. Only used when adding a single node.
 
@@ -153,7 +161,7 @@ class GeometryEditor(_BaseEditor):
         number_or_data : int | list | np.ndarray
             - Single bar: pass bar number (int) alongside start_node and end_node.
             - Multiple bars: pass a 2-D list or numpy array of shape (N, 3)
-            where each row is [member_number, start_node, end_node].
+              where each row is [member_number, start_node, end_node].
         start_node : int, optional
             Start node number. Only used when adding a single bar.
         end_node : int, optional

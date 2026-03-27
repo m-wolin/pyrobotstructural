@@ -7,6 +7,13 @@ deg_to_rad = math.pi / 180
 
 
 class LoadEditor(_BaseEditor):
+    """Editor for applying loads to members, nodes, and panels.
+
+    Accessed via ``app.loads.load``.  Supports self-weight, nodal forces,
+    uniform and trapezoidal bar loads, point loads along bars, and panel
+    (surface) loads.
+    """
+
     def __init__(self, raw_app: Any) -> None:
         super().__init__(raw_app)
         self._structure = self._raw.Project.Structure

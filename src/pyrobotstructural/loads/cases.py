@@ -4,6 +4,11 @@ from ..enums import CaseNature, CaseAnalizeType
 
 
 class LoadCaseManager(_BaseEditor):
+    """Manager for creating and listing load cases.
+
+    Accessed via ``app.loads.cases``.
+    """
+
     def __init__(self, raw_app: Any) -> None:
         super().__init__(raw_app)
         self._structure = self._raw.Project.Structure
